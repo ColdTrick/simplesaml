@@ -1,0 +1,51 @@
+= Installation instructions =
+
+== Step 1: SimpleSAMLPHP installation ==
+
+Also see http://simplesamlphp.org/docs/stable/simplesamlphp-install
+
+1. Download the SimpleSAMLPHP library from http://simplesamlphp.org/download, we recommend you use the 1.9.2 release.
+2. Upload the contents of the release to your webserver OUTSIDE the webdirectory (eq htdocs)
+3. Add an alias to your website configuration /simplesaml which points to the www directory in the SimpleSAMLPHP installation
+4. Edit /config/config.php and fill in the following options
+	- auth.adminpassword => this is the password for the admin part of SimpleSAMLPHP (remember this)
+	- secretsalt => generate a salt for signing of the communication (use a-z0-9) (don't need to remember this)
+	- technicalcontact_name => the name of the webmaster
+	- technicalcontact_email => the email address of the webmaster (error reports wil go here)
+	- language.default => (optional) is different from English
+	- timezone => Set it to your timezone
+5. Edit /www/_include.php before all code add
+	- require_once(path_to_your_elgg_installation . "/engine/start.php");
+
+== Step 2: SimpleSAMLPHP configuration as a ServiceProvider ==
+
+Also see http://simplesamlphp.org/docs/stable/simplesamlphp-sp
+
+1. generate a SSL certificate in the /cert directory
+	- example command: openssl req -newkey rsa:2048 -new -x509 -days 3652 -nodes -out saml.crt -keyout saml.pem
+2. For each IDP you wish to connect to:
+	- add a new config to /config/authsources.php (see http://simplesamlphp.org/docs/stable/simplesamlphp-sp#section_1)
+		- The config also needs to return some extra field, this can be copied/created from the return result
+		- The Elgg plugin can handle
+			- elgg:firstname => The firstname (givenname) of the user
+			- elgg:lastname => the lastname (surname) of the user (optional)
+			- elgg:email => the email address of the user (optional, when missing will be asked)
+			- elgg:external_id => a persistend unique id for this user (required, but can also be collected in a different way)
+	- add the new entityID to /metadata/saml20-idp-remote.php (see http://simplesamlphp.org/docs/stable/simplesamlphp-sp#section_2)
+
+== Step 3: Elgg configuration, first part ==
+
+1. Extract this plugin
+2. Upload it to your /mod folder
+3. Goto Admistration -> Plugins
+4. Enable the SimpleSAML plugin
+5. Goto the settings of the SimpleSAML plugin
+6. Fill in the path to the SimplSAMLPHP installation
+7. Fill in what you used as the alias for SimpleSAMLPHP
+8. Save the settings
+
+== Step 4: Elgg configuration, second part ==
+
+If you completed Step 3 successfully your configured IDPs should be listed.
+
+Further configuration should be self explanatory.
