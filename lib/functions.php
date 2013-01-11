@@ -58,7 +58,7 @@
 		$result = false;
 		
 		if(!empty($source)){
-			if($setting = elgg_get_plugin_setting($source . "_icon_url")){
+			if($setting = elgg_get_plugin_setting($source . "_icon_url", "simplesaml")){
 				$result = $setting;
 			}
 		}

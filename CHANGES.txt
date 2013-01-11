@@ -1,5 +1,9 @@
 = Version History =
 
+x.x:
+
+- fixed: SAML icon now loads correctly
+
 1.0 (2012-12-27):
 
 - first release
