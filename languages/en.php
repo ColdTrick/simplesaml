@@ -2,16 +2,16 @@
 
 	$english = array(
 		// general stuff
-		'simplesaml:error:loggedin' => "This actions can't be performed when you're logged in",
+		'simplesaml:error:loggedin' => "This action can't be performed when you're logged in",
 		'simplesaml:error:no_source' => "No SAML connection defined",
 		'simplesaml:error:source_not_enabled' => "The provided SAML connection isn't enabled on this site",
-		'simplesaml:error:source_mismatch' => "The provided SAML connecten doesn't macht the server connection",
+		'simplesaml:error:source_mismatch' => "The provided SAML connecten doesn't match the server connection",
 		'simplesaml:error:class' => "Error while getting the SAML configuration: %s",
 		
 		// pages
 		// no linked account
 		'simplesaml:no_linked_account:title' => "No account linked to the SAML connection: %s",
-		'simplesaml:no_linked_account:description' => "We couldn't find an account which is linked to your SAML account of %s. You can link your site account with your SAML account when you login here.",
+		'simplesaml:no_linked_account:description' => "We couldn't find an account which is linked to your SAML account of %s. You can link your site account with your SAML account when you login or register below.",
 		
 		'simplesaml:forms:register:description' => "If you don't have an account on this site yet, you can register an account by clicking on the register button. It may be neccesary to provide some additional information.",
 		
