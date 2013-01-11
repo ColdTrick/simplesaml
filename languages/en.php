@@ -15,6 +15,8 @@
 		
 		'simplesaml:forms:register:description' => "If you don't have an account on this site yet, you can register an account by clicking on the register button. It may be neccesary to provide some additional information.",
 		
+		'simplesaml:no_linked_account:login' => "Click here if you already have an account on this site",
+		
 		// settings
 		'simplesaml:settings:simplesamlphp_path' => "Path to the SimpleSAMLPHP library",
 		'simplesaml:settings:simplesamlphp_path:description' => "The full path to the SimpleSAMLPHP (http://simplesamlphp.org) library without a trailing slash (/)",

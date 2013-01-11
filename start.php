@@ -24,9 +24,6 @@
 		require_once(dirname(__FILE__) . "/lib/hooks.php");
 		require_once(dirname(__FILE__) . "/lib/page_handlers.php");
 		
-		// extend CSS
-		elgg_extend_view("css/elgg", "simplesaml/css/site");
-		
 		// allow login
 		elgg_extend_view("forms/login", "simplesaml/login");
 		
