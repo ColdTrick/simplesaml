@@ -13,5 +13,11 @@
 		<version>1.8.3</version>
 	</requires>
 	
+	<suggests>
+		<type>plugin</type>
+		<name>widget_manager</name>
+		<version>4.0</version>
+	</suggests>
+	
 	<category>ColdTrick</category>
 </plugin_manifest>
