@@ -43,6 +43,11 @@
 		
 		'simplesaml:usersettings:no_sources' => "No SAML sources are available, please ask your administrator to configure this.",
 		
+		// widgets
+		'simplesaml:widget:description' => "Shows a login widget with only SAML sources",
+		'simplesaml:widget:select_source' => "Please select the SAML source to show in the widget",
+		'simplesaml:widget:logged_in' => "<b>%s</b> welcome on the <b>%s</b> community",
+	
 		// procedures
 		// login
 		'simplesaml:login:no_linked_account' => "No account is connected to the SAML connection %s",

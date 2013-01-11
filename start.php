@@ -33,11 +33,15 @@
 		// register page_handler for nice URL's
 		elgg_register_page_handler("saml", "simplesaml_page_handler");
 		
+		// register widgets
+		elgg_register_widget_type("simplesaml", elgg_echo("login"), elgg_echo("simplesaml:widget:description"), "index", true);
+		
 		// register events
 		elgg_register_event_handler("login", "user", "simplesaml_login_event_handler");
 		
 		// register plugin hooks
 		elgg_register_plugin_hook_handler("public_pages", "walled_garden", "simplesaml_walled_garden_hook");
+		elgg_register_plugin_hook_handler("widget_url", "widget_manager", "simplesaml_widget_url_hook");
 		
 		// register actions
 		elgg_register_action("simplesaml/register", dirname(__FILE__) . "/actions/register.php", "public");

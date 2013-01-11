@@ -23,3 +23,23 @@
 	
 		return $result;
 	}
+	
+	function simplesaml_widget_url_hook($hook_name, $entity_type, $return_value, $params) {
+		$result = $return_value;
+	
+		if (!empty($params) && is_array($params)) {
+			if ($widget = elgg_extract("entity", $params)) {
+				if ($widget->handler == "simplesaml") {
+					$samlsource = $widget->samlsource;
+						
+					if (!empty($samlsource) && ($samlsource !== "all")) {
+						if (simplesaml_is_enabled_source($samlsource)) {
+							$result = "/saml/login/" . $samlsource;
+						}
+					}
+				}
+			}
+		}
+	
+		return $result;
+	}
