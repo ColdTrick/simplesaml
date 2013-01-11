@@ -3,6 +3,7 @@
 x.x:
 
 - added: index widget to show only SAML logins
+- added: Dutch translation
 - changed: layout of the no account linked page
 - fixed: SAML icon now loads correctly
 
