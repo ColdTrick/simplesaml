@@ -19,7 +19,7 @@ $language = array (
   'simplesaml:settings:sources:configuration:icon' => 'URL naar een icoon voor deze connectie (optioneel)',
   'simplesaml:settings:sources:configuration:icon:description' => 'Je kunt een URL opgeven naar een icoon voor deze connectie, dit zal gebruikt worden op het aanmeldscherm en bij de gebruikers instellingen.',
   'simplesaml:settings:sources:configuration:external_id' => 'Veld met de unieke user id van de SAML connectie (optioneel)',
-  'simplesaml:settings:sources:configuration:external_id:description' => 'Als je de unieke user id niet uit de attributen kunt halen, kun je hier een veld iut de AuthData opgeven welke de user id bevat.',
+  'simplesaml:settings:sources:configuration:external_id:description' => 'Als je de unieke user id niet uit de attributen kunt halen, kun je hier een veld uit de AuthData opgeven welke de user id bevat.',
   'simplesaml:settings:warning:configuration:sources' => 'Er zijn nog geen SAML connecties geconfigureerd',
   'simplesaml:settings:warning:configuration:simplesamlphp' => 'Geef het pad naar de SimpleSAMLPHP bibliotheek op voor verdere configuratie mogelijkheden',
   'simplesaml:usersettings:connected' => 'Je account is gekoppeld met de SAML connectie %s. Je kunt je op deze site aanmelden met je SAML account indien je dit wilt.',
@@ -38,6 +38,6 @@ $language = array (
   'simplesaml:authorize:success' => 'Je heb je account succesvol gekoppeld met de SAML connectie %s',
   'simplesaml:action:register:error:displayname' => 'Er is geen weergave naam opgegeven, vul je naam in',
   'simplesaml:action:unlink:error' => 'Er is een onbekende fout opgetreden tijdens het verwijderen van de koppeling met de SAML connectie %s',
-  'simplesaml:action:unlink:success' => 'De koppeling met de SAML connectie %s is succesvol verwijdered',
+  'simplesaml:action:unlink:success' => 'De koppeling met de SAML connectie %s is succesvol verwijdert',
 );
 add_translation("nl", $language);
