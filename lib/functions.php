@@ -239,6 +239,21 @@
 		if(!empty($email) && validate_email_address($email)){
 			list($username, $dummy) = explode("@", $email);
 			
+			// filter invalid characters from username from validate_username()
+			$username = preg_replace('/[^a-zA-Z0-9]/', "", $username);
+			
+			// check for min username length
+			$minchars = (int) elgg_get_config("minusername");
+			if (empty($minchars)) {
+				$minchars = 4;
+			}
+			
+			$username = str_pad($username, $minchars, "0", STR_PAD_RIGHT);
+			
+			// we have to be able to see all users
+			$hidden = access_get_show_hidden_status();
+			access_show_hidden_entities(true);
+			
 			$i = 1;
 			// does this username exist
 			if(get_user_by_username($username)){
@@ -251,6 +266,9 @@
 			} else {
 				$result = $username;
 			}
+			
+			// restore hidden entities
+			access_show_hidden_entities($hidden);
 		}
 		
 		return $result;
