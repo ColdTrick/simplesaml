@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	$source = get_input("saml_source");
 	$displayname = get_input("displayname");
@@ -97,7 +97,7 @@
 									$forward_url = "";
 								}
 							} catch(Exception $e){
-								register_error($e->getMessage());
+								//register_error($e->getMessage());
 								$forward_url = "";
 							}
 						}

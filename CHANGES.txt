@@ -1,5 +1,9 @@
 = Version History =
 
+x.x:
+
+- changed: no longer outputting the Exception during the registration process because of confusing errors
+
 1.1 (2013-04-05):
 
 - added: index widget to show only SAML logins
