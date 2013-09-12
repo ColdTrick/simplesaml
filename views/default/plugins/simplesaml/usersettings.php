@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	$plugin = elgg_extract("entity", $vars);
 	$page_owner = elgg_get_page_owner_entity();
@@ -21,8 +21,8 @@
 				$body .= "<div>" . elgg_echo("simplesaml:usersettings:connected", array($label)) . "</div>";
 				
 				$body .= elgg_view("output/confirmlink", array(
-							"text" => elgg_echo("simplesaml:usersettings:unlink_url"), 
-							"confirm" => elgg_echo("simplesaml:usersettings:unlink_confirm", array($label)), 
+							"text" => elgg_echo("simplesaml:usersettings:unlink_url"),
+							"confirm" => elgg_echo("simplesaml:usersettings:unlink_confirm", array($label)),
 							"href" => "action/simplesaml/unlink?user_guid=" . $page_owner->getGUID() . "&source=" . $source
 						));
 			} else {
@@ -31,7 +31,7 @@
 				
 				if($page_owner->getGUID() == elgg_get_logged_in_user_guid()){
 					$body .= elgg_view("output/url", array(
-								"text" => elgg_echo("simplesaml:usersettings:link_url"), 
+								"text" => elgg_echo("simplesaml:usersettings:link_url"),
 								"href" => "saml/authorize/" . $source
 							));
 				}

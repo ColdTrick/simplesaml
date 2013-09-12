@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	$english = array(
 		// general stuff
@@ -25,6 +25,7 @@
 		
 		'simplesaml:settings:sources:name' => "SAML connection",
 		'simplesaml:settings:sources:allow_registration' => "Allow registration",
+		'simplesaml:settings:sources:save_attributes' => "Save SAML attributes",
 		
 		'simplesaml:settings:sources:configuration:title' => "Configuration settings for: %s",
 		'simplesaml:settings:sources:configuration:icon' => "URL to an icon for this connection (optional)",

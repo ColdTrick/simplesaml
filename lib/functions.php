@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	function simplesaml_get_source_label($source){
 		$result = $source;
@@ -186,6 +186,10 @@
 		$result = false;
 		
 		if(!empty($user) && elgg_instanceof($user, "user", null, "ElggUser") && !empty($saml_source)){
+			// cleanup the saml attributes
+			simplesaml_save_authentication_attributes($user, $saml_source);
+			
+			// remove the link to the user
 			$result = elgg_unset_plugin_user_setting($saml_source . "_uid", $user->getGUID(), "simplesaml");
 		}
 		
@@ -241,15 +245,15 @@
 			
 			// filter invalid characters from username from validate_username()
 			$username = preg_replace('/[^a-zA-Z0-9]/', "", $username);
-			
+				
 			// check for min username length
 			$minchars = (int) elgg_get_config("minusername");
 			if (empty($minchars)) {
 				$minchars = 4;
 			}
-			
+				
 			$username = str_pad($username, $minchars, "0", STR_PAD_RIGHT);
-			
+				
 			// we have to be able to see all users
 			$hidden = access_get_show_hidden_status();
 			access_show_hidden_entities(true);
@@ -274,3 +278,49 @@
 		return $result;
 	}
 	
+	function simplesaml_save_authentication_attributes(ElggUser $user, $saml_source, $attributes = false) {
+	
+		if (!empty($user) && elgg_instanceof($user, "user") && !empty($saml_source) && simplesaml_is_enabled_source($saml_source)) {
+			// remove the current attrributes
+			elgg_unset_plugin_user_setting($saml_source . "_attributes", $user->getGUID(), "simplesaml");
+			
+			// are we allowed to save the attributes
+			if (elgg_get_plugin_setting($saml_source . "_save_attributes", "simplesaml")) {
+				// save settings
+				if (!empty($attributes) && is_array($attributes)) {
+					// filter some keys out of the attributes
+					unset($attributes["elgg:firstname"]);
+					unset($attributes["elgg:lastname"]);
+					unset($attributes["elgg:email"]);
+					unset($attributes["elgg:external_id"]);
+		
+					elgg_set_plugin_user_setting($saml_source . "_attributes", json_encode($attributes), $user->getGUID(), "simplesaml");
+				}
+			}
+		}
+	}
+	
+	function simplesaml_get_authentication_user_attribute($saml_source, $attribute_name = false, $user_guid = 0) {
+		$result = false;
+		
+		$user_guid = sanitise_int($user_guid, false);
+		if (empty($user_guid)) {
+			$user_guid = elgg_get_logged_in_user_guid();
+		}
+		
+		if (!empty($user_guid)) {
+			if (!empty($saml_source) && simplesaml_is_enabled_source($saml_source)) {
+				if ($attributes = elgg_get_plugin_user_setting($saml_source . "_attributes", $user_guid, "simplesaml")) {
+					$attributes = json_decode($attributes, true);
+					
+					if (!empty($attribute_name)) {
+						$result = elgg_extract($attribute_name, $attributes, false);
+					} else {
+						$result = $attributes;
+					}
+				}
+			}
+		}
+		
+		return $result;
+	}

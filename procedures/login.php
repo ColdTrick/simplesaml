@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	$forward_url = REFERER;
 

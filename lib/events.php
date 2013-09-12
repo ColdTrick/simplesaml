@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	function simplesaml_login_event_handler($event, $type, $object){
 		
@@ -15,6 +15,9 @@
 						// save the external id so the next login will go faster
 						simplesaml_link_user($object, $source, $saml_uid);
 					}
+					
+					// save the attributes to the user
+					simplesaml_save_authentication_attributes($object, $source, $saml_attributes);
 				}
 				
 				unset($_SESSION["saml_attributes"]);

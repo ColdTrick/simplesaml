@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	$plugin = elgg_extract("entity", $vars);
 	
@@ -24,11 +24,13 @@
 			echo "<th class='center'>" . elgg_echo("enable") . "</th>";
 			echo "<th>" . elgg_echo("simplesaml:settings:sources:name") . "</th>";
 			echo "<th class='center'>" . elgg_echo("simplesaml:settings:sources:allow_registration") . "</th>";
+			echo "<th class='center'>" . elgg_echo("simplesaml:settings:sources:save_attributes") . "</th>";
 			echo "</tr>";
 			
 			foreach($sources as $source){
 				$enabled = array();
 				$registration = array();
+				$save_attributes = array();
 				
 				if($plugin->getSetting($source . "_enabled")){
 					$enabled = array("checked" => "checked");
@@ -40,10 +42,15 @@
 					$registration = array("checked" => "checked");
 				}
 				
+				if($plugin->getSetting($source . "_save_attributes")){
+					$save_attributes = array("checked" => "checked");
+				}
+				
 				echo "<tr>";
 				echo "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source . "_enabled]", "value" => "1") + $enabled) . "</td>";
 				echo "<td>" . $source . "</td>";
 				echo "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source . "_allow_registration]", "value" => "1") + $registration) . "</td>";
+				echo "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source . "_save_attributes]", "value" => "1") + $save_attributes) . "</td>";
 				echo "</tr>";
 			}
 			
