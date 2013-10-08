@@ -30,15 +30,15 @@
 					// user is authenticated with IDP, so check in Elgg
 					$saml_attributes = simplesaml_get_authentication_attributes($saml_auth, $source);
 					
+					// save the attributes for further use
+					$_SESSION["saml_attributes"] = $saml_attributes;
+					$_SESSION["saml_source"] = $source;
+					
 					// make sure we can find all users (even unvalidated)
 					$hidden = access_get_show_hidden_status();
 					access_show_hidden_entities(true);
 					
 					if($user = simplesaml_find_user($source, $saml_attributes)){
-						// unset session vars
-						unset($_SESSION["saml_attributes"]);
-						unset($_SESSION["saml_source"]);
-						
 						// found a user, so login
 						try {
 							login($user);
@@ -58,10 +58,13 @@
 							// forward to front page
 							$forward_url = "";
 						}
+						
+						// unset session vars
+						unset($_SESSION["saml_attributes"]);
+						unset($_SESSION["saml_source"]);
+						
 					} else {
-						// no user found, so forward to a different page, but keep saml attributes
-						$_SESSION["saml_attributes"] = $saml_attributes;
-						$_SESSION["saml_source"] = $source;
+						// no user found, so forward to a different page
 						$forward_url = "saml/no_linked_account/" . $source;
 						
 						system_message(elgg_echo("simplesaml:login:no_linked_account", array($label)));
