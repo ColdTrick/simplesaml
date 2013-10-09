@@ -3,6 +3,7 @@
 x.x:
 
 - added: saving of the SAML attributes on login
+- added: listing of saved SAML attributes in the user settings (only for admins)
 - changed: no longer outputting the Exception during the registration process because of confusing errors
 
 1.1 (2013-04-05):

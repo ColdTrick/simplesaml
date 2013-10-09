@@ -41,6 +41,10 @@
 		'simplesaml:usersettings:unlink_url' => "Click here to remove the connection",
 		'simplesaml:usersettings:unlink_confirm' => "Are you sure you wish to break the connection with %s",
 
+		'simplesaml:usersettings:toggle_attributes' => "Show the saved SAML attributes",
+		'simplesaml:usersettings:attributes:name' => "Name",
+		'simplesaml:usersettings:attributes:value' => "Value",
+		
 		'simplesaml:usersettings:not_connected' => "Your account is not connected with the SAML connection %s. If you wish to login on this site with your SAML account, please link both account.",
 		'simplesaml:usersettings:link_url' => "Click here to link both accounts",
 		
