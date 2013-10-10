@@ -21,7 +21,7 @@
 			$result = false;
 			
 			if(class_exists("SimpleSAML_Auth_Source")){
-				if($sources = SimpleSAML_Auth_Source::getSources()){
+				if($sources = SimpleSAML_Auth_Source::getSourcesOfType("saml:SP")){
 					$result = $sources;
 				}
 			}
@@ -40,8 +40,10 @@
 				$enabled_sources = array();
 				
 				foreach($sources as $source){
-					if(elgg_get_plugin_setting($source . "_enabled", "simplesaml")){
-						$enabled_sources[] = $source;
+					$source_auth_id = $source->getAuthId();
+					
+					if(elgg_get_plugin_setting($source_auth_id . "_enabled", "simplesaml")){
+						$enabled_sources[] = $source_auth_id;
 					}
 				}
 				

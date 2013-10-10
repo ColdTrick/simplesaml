@@ -28,29 +28,30 @@
 			echo "</tr>";
 			
 			foreach($sources as $source){
+				$source_auth_id = $source->getAuthId();
 				$enabled = array();
 				$registration = array();
 				$save_attributes = array();
 				
-				if($plugin->getSetting($source . "_enabled")){
+				if($plugin->getSetting($source_auth_id . "_enabled")){
 					$enabled = array("checked" => "checked");
 					
-					$enabled_sources[] = $source;
+					$enabled_sources[] = $source_auth_id;
 				}
 				
-				if($plugin->getSetting($source . "_allow_registration")){
+				if($plugin->getSetting($source_auth_id . "_allow_registration")){
 					$registration = array("checked" => "checked");
 				}
 				
-				if($plugin->getSetting($source . "_save_attributes")){
+				if($plugin->getSetting($source_auth_id . "_save_attributes")){
 					$save_attributes = array("checked" => "checked");
 				}
 				
 				echo "<tr>";
-				echo "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source . "_enabled]", "value" => "1") + $enabled) . "</td>";
-				echo "<td>" . $source . "</td>";
-				echo "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source . "_allow_registration]", "value" => "1") + $registration) . "</td>";
-				echo "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source . "_save_attributes]", "value" => "1") + $save_attributes) . "</td>";
+				echo "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source_auth_id . "_enabled]", "value" => "1") + $enabled) . "</td>";
+				echo "<td>" . $source_auth_id . "</td>";
+				echo "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source_auth_id . "_allow_registration]", "value" => "1") + $registration) . "</td>";
+				echo "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source_auth_id . "_save_attributes]", "value" => "1") + $save_attributes) . "</td>";
 				echo "</tr>";
 			}
 			
