@@ -1,14 +1,14 @@
-<?php 
+<?php
 
-	function simplesaml_walled_garden_hook($hook_name, $entity_type, $return_value, $params){
+	function simplesaml_walled_garden_hook($hook_name, $entity_type, $return_value, $params) {
 		$result = $return_value;
 	
 		// get virtual directory path to simplesamlphp installation
 		static $simplesamlphp_directoy;
-		if(!isset($simplesamlphp_directoy)){
+		if (!isset($simplesamlphp_directoy)) {
 			$simplesamlphp_directoy = false;
 			
-			if($setting = elgg_get_plugin_setting("simplesamlphp_directory", "simplesaml")){
+			if ($setting = elgg_get_plugin_setting("simplesamlphp_directory", "simplesaml")) {
 				$simplesamlphp_directoy = $setting;
 			}
 		}
@@ -17,7 +17,7 @@
 		$result[] = "saml/.*";
 		$result[] = "action/simplesaml/.*";
 		
-		if($simplesamlphp_directoy){
+		if ($simplesamlphp_directoy) {
 			$result[] = $simplesamlphp_directoy . "/.*";
 		}
 	
@@ -41,5 +41,26 @@
 			}
 		}
 	
+		return $result;
+	}
+	
+	function simplesaml_plugin_setting_save_hook($hook_name, $entity_type, $return_value, $params) {
+		$result = $return_value;
+	
+		if (!empty($params) && is_array($params)) {
+			$plugin = elgg_extract("plugin", $params);
+			$setting_name = elgg_extract("name", $params);
+			
+			if (!empty($plugin) && elgg_instanceof($plugin, "object", "plugin")) {
+				if ($plugin->getID() == "simplesaml") {
+					$pattern = '/^(idp_){1}[\S]+(_attributes){1}$/';
+					
+					if (preg_match($pattern, $setting_name)) {
+						$result = json_encode($result);
+					}
+				}
+			}
+		}
+		
 		return $result;
 	}

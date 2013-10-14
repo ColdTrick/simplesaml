@@ -23,6 +23,7 @@
 		'simplesaml:settings:simplesamlphp_directory' => "Virtual directory of the SimpleSAMLPHP library",
 		'simplesaml:settings:simplesamlphp_directory:description' => "The directory in which the SimpleSAMLPHP library is located without a trailing slash(/). For example if the full path is %ssimplesamlphp/, please enter simplesamlphp",
 		
+		'simplesaml:settings:sources' => "Service provider configuration",
 		'simplesaml:settings:sources:name' => "SAML connection",
 		'simplesaml:settings:sources:allow_registration' => "Allow registration",
 		'simplesaml:settings:sources:save_attributes' => "Save SAML attributes",
@@ -36,11 +37,18 @@
 		'simplesaml:settings:warning:configuration:sources' => "No SAML connections have been configured yet",
 		'simplesaml:settings:warning:configuration:simplesamlphp' => "Please provide the path to the SimpleSAMLPHP library for further configuration options",
 		
+		'simplesaml:settings:idp' => "IDentity Provider configuration for: %s",
+		'simplesaml:settings:idp:description' => "Here you can configure which profile information is provided in the SAML authentication process.",
+		'simplesaml:settings:idp:show_attributes' => "Show the configurable profile information fields",
+		'simplesaml:settings:idp:profile_field' => "Profile field",
+		'simplesaml:settings:idp:attribute' => "SAML attribute name",
+		'simplesaml:settings:idp:attribute:description' => "When an attribute name is left blank it will not be provided in the SAML authentication process.",
+		
 		// user settings
 		'simplesaml:usersettings:connected' => "Your account is connected with the SAML connection %s. You can login to this site with you SAML account if you wish.",
 		'simplesaml:usersettings:unlink_url' => "Click here to remove the connection",
 		'simplesaml:usersettings:unlink_confirm' => "Are you sure you wish to break the connection with %s",
-
+		
 		'simplesaml:usersettings:toggle_attributes' => "Show the saved SAML attributes",
 		'simplesaml:usersettings:attributes:name' => "Name",
 		'simplesaml:usersettings:attributes:value' => "Value",

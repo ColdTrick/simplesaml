@@ -1,5 +1,7 @@
 = Installation instructions =
 
+This installation instruction is mostly beased on SimpleSAMLPHP v1.5 some parts could be different in newer versions.
+
 == Step 1: SimpleSAMLPHP installation ==
 
 Also see http://simplesamlphp.org/docs/stable/simplesamlphp-install
@@ -17,7 +19,11 @@ Also see http://simplesamlphp.org/docs/stable/simplesamlphp-install
 5. Edit /www/_include.php before all code add
 	- require_once(path_to_your_elgg_installation . "/engine/start.php");
 
-== Step 2: SimpleSAMLPHP configuration as a ServiceProvider ==
+== Step 2: Configuration as a ServiceProvider ==
+
+Follow these instructions of you want to login to your Elgg site by using an other site as the IDentity Provider.
+
+=== Step 2.1: SimpleSAMLPHP configuration ===
 
 Also see http://simplesamlphp.org/docs/stable/simplesamlphp-sp
 
@@ -33,7 +39,7 @@ Also see http://simplesamlphp.org/docs/stable/simplesamlphp-sp
 			- elgg:external_id => a persistend unique id for this user (required, but can also be collected in a different way)
 	- add the new entityID to /metadata/saml20-idp-remote.php (see http://simplesamlphp.org/docs/stable/simplesamlphp-sp#section_2)
 
-== Step 3: Elgg configuration, first part ==
+=== Step 2.2: Elgg configuration, first part ===
 
 1. Extract this plugin
 2. Upload it to your /mod folder
@@ -44,8 +50,42 @@ Also see http://simplesamlphp.org/docs/stable/simplesamlphp-sp
 7. Fill in what you used as the alias for SimpleSAMLPHP
 8. Save the settings
 
-== Step 4: Elgg configuration, second part ==
+=== Step 2.3: Elgg configuration, second part ===
 
 If you completed Step 3 successfully your configured IDPs should be listed.
 
 Further configuration should be self explanatory.
+
+== Step 3: Configuration as an IDentity Provider ==
+
+If you want your Elgg site to be the authentication system for some other site, follow these instructions.
+
+=== Step 3.1: SimpleSAMLPHP configuration ===
+
+Also see http://simplesamlphp.org/docs/stable/simplesamlphp-idp
+
+1. In config/config.php enable 'enable.saml20-idp'
+2. Copy the contents of mod/simplesaml/vendors/simplesaml/modules to the modules directory of your SimpleSAMLPHP directory.
+3. Edit config/authsources.php to configure a new authentication source
+	- you can use this example:
+	
+		`'elgg-idp' => array(  
+			'authelgg:External',  
+			'privatekey'  => '<your private certificate key>',  
+			'certificate' => '<your private certificate>',  
+		),`
+4. Edit metadata/saml20-idp-hosted.php to setup the IDP
+	- you can use this example:
+	
+	`$metadata['__DYNAMIC:1__'] = array(
+		'host' => '__DEFAULT__',
+		'privatekey' => '<your private certificate key>',
+		'certificate' => '<your private certificate>',
+		'auth' => '<the name you configured above>',
+	);`
+5. For each Service Provider you wish to support you need to include a config in metadata/saml20-sp-remove.php
+
+=== Step 3.2: Elgg configuration === 
+
+1. Follow the step described in 2.2
+2. You can configure which profile data is exported in the authentication challenge, if you leave the SAML name fields empty the data will NOT be exported. 
