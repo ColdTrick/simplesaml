@@ -4,7 +4,7 @@ This installation instruction is mostly beased on SimpleSAMLPHP v1.5 some parts 
 
 == Step 1: SimpleSAMLPHP installation ==
 
-Also see http://simplesamlphp.org/docs/stable/simplesamlphp-install
+Also see http://simplesamlphp.org/docs/1.5/simplesamlphp-install
 
 1. Download the SimpleSAMLPHP library from http://simplesamlphp.org/download, we recommend you use the 1.9.2 release.
 2. Upload the contents of the release to your webserver OUTSIDE the webdirectory (eq htdocs)
@@ -25,19 +25,19 @@ Follow these instructions of you want to login to your Elgg site by using an oth
 
 === Step 2.1: SimpleSAMLPHP configuration ===
 
-Also see http://simplesamlphp.org/docs/stable/simplesamlphp-sp
+Also see http://simplesamlphp.org/docs/1.5/simplesamlphp-sp
 
 1. generate a SSL certificate in the /cert directory
 	- example command: openssl req -newkey rsa:2048 -new -x509 -days 3652 -nodes -out saml.crt -keyout saml.pem
 2. For each IDP you wish to connect to:
-	- add a new config to /config/authsources.php (see http://simplesamlphp.org/docs/stable/simplesamlphp-sp#section_1)
+	- add a new config to /config/authsources.php (see http://simplesamlphp.org/docs/1.5/simplesamlphp-sp#section_1)
 		- The config also needs to return some extra field, this can be copied/created from the return result
 		- The Elgg plugin can handle
 			- elgg:firstname => The firstname (givenname) of the user
 			- elgg:lastname => the lastname (surname) of the user (optional)
 			- elgg:email => the email address of the user (optional, when missing will be asked)
 			- elgg:external_id => a persistend unique id for this user (required, but can also be collected in a different way)
-	- add the new entityID to /metadata/saml20-idp-remote.php (see http://simplesamlphp.org/docs/stable/simplesamlphp-sp#section_2)
+	- add the new entityID to /metadata/saml20-idp-remote.php (see http://simplesamlphp.org/docs/1.5/simplesamlphp-sp#section_2)
 
 === Step 2.2: Elgg configuration, first part ===
 
@@ -62,7 +62,7 @@ If you want your Elgg site to be the authentication system for some other site, 
 
 === Step 3.1: SimpleSAMLPHP configuration ===
 
-Also see http://simplesamlphp.org/docs/stable/simplesamlphp-idp
+Also see http://simplesamlphp.org/docs/1.5/simplesamlphp-idp
 
 1. In config/config.php enable 'enable.saml20-idp'
 2. Copy the contents of mod/simplesaml/vendors/simplesaml/modules to the modules directory of your SimpleSAMLPHP directory.
