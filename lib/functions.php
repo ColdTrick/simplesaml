@@ -208,12 +208,20 @@ function simplesaml_unlink_user(ElggUser $user, $saml_source) {
 	return $result;
 }
 
-function simplesaml_register_user($name, $email, $saml_source, $validate = false) {
+function simplesaml_register_user($name, $email, $saml_source, $validate = false, $username = "") {
 	$result = false;
 	
 	if (!empty($name) && !empty($email) && !empty($saml_source)) {
-		// create a username from email
-		$username = simplesaml_generate_username_from_email($email);
+		
+		// check which username to use
+		if (!empty($username)) {
+			// make sure the username is unique
+			$username = simplesaml_generate_unique_username($username);
+		} else {
+			// create a username from email
+			$username = simplesaml_generate_username_from_email($email);
+		}
+		
 		if (!empty($username)) {
 			// generate a random password
 			$password = generate_random_cleartext_password();
@@ -257,6 +265,17 @@ function simplesaml_generate_username_from_email($email) {
 	if (!empty($email) && validate_email_address($email)) {
 		list($username) = explode("@", $email);
 		
+		// make sure the username is unique
+		$result = simplesaml_generate_unique_username($username);
+	}
+	
+	return $result;
+}
+
+function simplesaml_generate_unique_username($username) {
+	$result = false;
+
+	if (!empty($username)) {
 		// filter invalid characters from username from validate_username()
 		$username = preg_replace('/[^a-zA-Z0-9]/', "", $username);
 			
@@ -279,7 +298,7 @@ function simplesaml_generate_username_from_email($email) {
 			while (get_user_by_username($username . $i)) {
 				$i++;
 			}
-			
+				
 			$result = $username . $i;
 		} else {
 			$result = $username;
@@ -288,7 +307,7 @@ function simplesaml_generate_username_from_email($email) {
 		// restore hidden entities
 		access_show_hidden_entities($hidden);
 	}
-	
+
 	return $result;
 }
 
@@ -307,6 +326,7 @@ function simplesaml_save_authentication_attributes(ElggUser $user, $saml_source,
 				unset($attributes["elgg:lastname"]);
 				unset($attributes["elgg:email"]);
 				unset($attributes["elgg:external_id"]);
+				unset($attributes["elgg:username"]);
 	
 				elgg_set_plugin_user_setting($saml_source . "_attributes", json_encode($attributes), $user->getGUID(), "simplesaml");
 			}

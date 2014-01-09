@@ -1,5 +1,9 @@
 = Version History =
 
+x.x:
+
+- added: support for IDP provided username #2
+
 1.2 (2013-10-14):
 
 - added: saving of the SAML attributes on login

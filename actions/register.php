@@ -61,9 +61,11 @@ if (!elgg_is_logged_in()) {
 					register_error(elgg_echo("registration:emailnotvalid"));
 				}
 				
+				$username = elgg_extract("elgg:username", $saml_attributes);
+				
 				// register user
 				if (empty($error)) {
-					$user = simplesaml_register_user($name, $email, $source, $validate);
+					$user = simplesaml_register_user($name, $email, $source, $validate, $username);
 					if (!empty($user)) {
 						// link user to the saml source
 						// make sure we can find hidden (unvalidated) users
