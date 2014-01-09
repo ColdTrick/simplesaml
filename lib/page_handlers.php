@@ -1,5 +1,15 @@
 <?php
+/**
+ * All page handlers for this plugin will be handled in this file
+ */
 
+/**
+ * The page handler for all saml/ pages
+ *
+ * @param array $page the array of the different page elements
+ *
+ * @return bool true if we get a valid page, false on failure
+ */
 function simplesaml_page_handler($page) {
 	$result = false;
 	$include_file = "";

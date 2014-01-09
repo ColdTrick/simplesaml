@@ -1,5 +1,18 @@
 <?php
+/**
+ * In this file all helper functions for this pluign can be found.
+ */
 
+/**
+ * Get a readable label for a configured Service Provider (SP).
+ *
+ * The language key that is checked is 'simplesaml:sources:label:<source name>',
+ * if this is not found the source name will be returned.
+ *
+ * @param string $source the name of the SP
+ *
+ * @return string the readable name for the SP
+ */
 function simplesaml_get_source_label($source) {
 	$result = $source;
 	
@@ -14,6 +27,11 @@ function simplesaml_get_source_label($source) {
 	return $result;
 }
 
+/**
+ * Return an array of the configured SAML Service Providers (SP).
+ *
+ * @return bool|array an array with the configured SP's, or false on failure
+ */
 function simplesaml_get_configured_sources() {
 	static $result;
 	
@@ -31,6 +49,15 @@ function simplesaml_get_configured_sources() {
 	return $result;
 }
 
+/**
+ * Return an array of all the enabled configured Service Providers (SP).
+ *
+ * To enable a Service Provider please check the plugin settings page.
+ *
+ * @see simplesaml_get_configured_sources()
+ *
+ * @return bool|array an array with the enabled SP's
+ */
 function simplesaml_get_enabled_sources() {
 	static $result;
 	
@@ -58,6 +85,15 @@ function simplesaml_get_enabled_sources() {
 	return $result;
 }
 
+/**
+ * Find out if ther is an icon configured for the provided Service Provider (SP).
+ *
+ * To configure an icon please check the plugin settings page.
+ *
+ * @param string $source the name of the SP to check
+ *
+ * @return bool|string the url of the icon, or false if not configured
+ */
 function simplesaml_get_source_icon_url($source) {
 	$result = false;
 	
@@ -71,9 +107,15 @@ function simplesaml_get_source_icon_url($source) {
 	return $result;
 }
 
+/**
+ * Check if a Serivce Provider (SP) is enabled in the plugin settings.
+ *
+ * @param string $source the name of the SP to check
+ *
+ * @return bool true is enabled, false in all other cases
+ */
 function simplesaml_is_enabled_source($source) {
 	$result = false;
-	
 	
 	if (!empty($source)) {
 		$enabled_sources = simplesaml_get_enabled_sources();
@@ -86,6 +128,14 @@ function simplesaml_is_enabled_source($source) {
 	return $result;
 }
 
+/**
+ * Check if we can find a user that is linked to the user provided by the Service Provider (SP).
+ *
+ * @param string $source the name of the SP
+ * @param array $saml_attributes an array with the attributes provided by the SP configuration
+ *
+ * @return bool|ElggUser the user that is linked, false if no user could be found
+ */
 function simplesaml_find_user($source, $saml_attributes) {
 	$result = false;
 	
@@ -116,6 +166,13 @@ function simplesaml_find_user($source, $saml_attributes) {
 	return $result;
 }
 
+/**
+ * Can user register with information provided by the supplied Service Provider (SP).
+ *
+ * @param string $source the name of the SP
+ *
+ * @return bool true is registration is allowed, false otherwise
+ */
 function simplesaml_allow_registration($source) {
 	$result = false;
 	
@@ -128,6 +185,13 @@ function simplesaml_allow_registration($source) {
 	return $result;
 }
 
+/**
+ * A helper function to undo the extensions on the login form view.
+ *
+ * @see elgg_extend()
+ *
+ * @return void
+ */
 function simplesaml_unextend_login_form() {
 	global $CONFIG;
 	
@@ -145,6 +209,20 @@ function simplesaml_unextend_login_form() {
 	}
 }
 
+/**
+ * Get the attributes from an SAML authentication exchange.
+ *
+ * These attributes can include all kinds of information, for example:
+ * - firstname
+ * - lastname
+ * - email address
+ * - etc.
+ *
+ * @param SimpleSAML_Auth_Simple $saml_auth the Authentication object from the SimpleSAMLPHP library
+ * @param string $source the name of the Service Provider
+ *
+ * @return bool|array an array with the provided attributes, false on failure
+ */
 function simplesaml_get_authentication_attributes(SimpleSAML_Auth_Simple $saml_auth, $source) {
 	$result = false;
 	
@@ -163,6 +241,15 @@ function simplesaml_get_authentication_attributes(SimpleSAML_Auth_Simple $saml_a
 	return $result;
 }
 
+/**
+ * Link a user to a Service Provider (SP), so in the future the user can login using this SP.
+ *
+ * @param ElggUser $user the user to link
+ * @param string $saml_source the name of the SP
+ * @param string $saml_uid the unique ID of the user on the IDentity Provider side
+ *
+ * @return bool true is the user is successfully linked, false on failure
+ */
 function simplesaml_link_user(ElggUser $user, $saml_source, $saml_uid) {
 	$result = false;
 	
@@ -194,6 +281,14 @@ function simplesaml_link_user(ElggUser $user, $saml_source, $saml_uid) {
 	return $result;
 }
 
+/**
+ * Remove an existing link between the user and a Service Provider (SP).
+ *
+ * @param ElggUser $user the user to unlink
+ * @param string $saml_source the name of the SP
+ *
+ * @return bool true is the user is unlinked, false on failure
+ */
 function simplesaml_unlink_user(ElggUser $user, $saml_source) {
 	$result = false;
 	
@@ -208,6 +303,17 @@ function simplesaml_unlink_user(ElggUser $user, $saml_source) {
 	return $result;
 }
 
+/**
+ * Register a user in Elgg based on information provided by the Service Provider (SP).
+ *
+ * @param string $name the (display)name of the new user
+ * @param string $email the email address of the user
+ * @param string $saml_source the name of the SP this information came from
+ * @param bool $validate do we need to validate the email address of this new users
+ * @param string $username the username provided by the SP (optional)
+ *
+ * @return bool|ElggUser the new user, false on failure
+ */
 function simplesaml_register_user($name, $email, $saml_source, $validate = false, $username = "") {
 	$result = false;
 	
@@ -259,6 +365,18 @@ function simplesaml_register_user($name, $email, $saml_source, $validate = false
 	return $result;
 }
 
+/**
+ * Generate a unique username based on a provided email address.
+ *
+ * The first part (before @) of the email address will be used as a base.
+ * Numbers will be added to the end to make it unique.
+ *
+ * @param string $email the email address to use
+ *
+ * @see simplesaml_generate_unique_username()
+ *
+ * @return bool|string a unique username, false on failure
+ */
 function simplesaml_generate_username_from_email($email) {
 	$result = false;
 	
@@ -272,6 +390,16 @@ function simplesaml_generate_username_from_email($email) {
 	return $result;
 }
 
+/**
+ * Make a username unique for use in the community.
+ *
+ * Some invalid characters will be filtered out,
+ * and the username will be made unique by added numbers to the end.
+ *
+ * @param string $username the username to use as a base
+ *
+ * @return bool|string a unique username, false on failure
+ */
 function simplesaml_generate_unique_username($username) {
 	$result = false;
 
@@ -311,6 +439,15 @@ function simplesaml_generate_unique_username($username) {
 	return $result;
 }
 
+/**
+ * Save the authenticaion attributes provided by the Service Provider (SP) for later use.
+ *
+ * @param ElggUser $user the user to store the attributes for
+ * @param string $saml_source the name of the Service Provider which provided the attributes
+ * @param array|false $attributes the attributes to save, false to remove all attributes
+ *
+ * @return void
+ */
 function simplesaml_save_authentication_attributes(ElggUser $user, $saml_source, $attributes = false) {
 
 	if (!empty($user) && elgg_instanceof($user, "user") && !empty($saml_source) && simplesaml_is_enabled_source($saml_source)) {
@@ -334,6 +471,15 @@ function simplesaml_save_authentication_attributes(ElggUser $user, $saml_source,
 	}
 }
 
+/**
+ * Get the saved authentication attributes of a user.
+ *
+ * @param string $saml_source the name of the Service Provided to return the attributes from
+ * @param bool|string $attribute_name if provided with an attribute name only that attribute will be returned, otherwise all attributes will be returned
+ * @param int $user_guid the user GUID, defaults to the current logged in user
+ *
+ * @return bool|string|array array with attributes, or a string if attribute_name was provided, false on failure
+ */
 function simplesaml_get_authentication_user_attribute($saml_source, $attribute_name = false, $user_guid = 0) {
 	$result = false;
 	
@@ -360,6 +506,14 @@ function simplesaml_get_authentication_user_attribute($saml_source, $attribute_n
 	return $result;
 }
 
+/**
+ * Undo the extensions of the login form.
+ *
+ * @todo check the difference with simplesaml_unextend_login_form()
+ * @see elgg_extend()
+ *
+ * @return void
+ */
 function simplesaml_undo_login_extends() {
 	global $CONFIG;
 	
@@ -376,6 +530,15 @@ function simplesaml_undo_login_extends() {
 	}
 }
 
+/**
+ * Get the user attributes for the provided IDendtity Provider (IDP) configuration.
+ *
+ * These attributes will be send to an external Service Provider.
+ *
+ * @param string $idp_auth_id the name of the IDP configuration
+ *
+ * @return array an array with all the configured attributes
+ */
 function simplesaml_get_user_attributes($idp_auth_id) {
 	$result = null;
 	
@@ -418,6 +581,11 @@ function simplesaml_get_user_attributes($idp_auth_id) {
 	return $result;
 }
 
+/**
+ * Get all the configured IDentity Providers (IDP) as configured in SimpleSAMLPHP.
+ *
+ * @return bool|array an array with the IDP configurations, false on failure
+ */
 function simplesaml_get_configured_idp_sources() {
 	static $result;
 	
@@ -435,6 +603,15 @@ function simplesaml_get_configured_idp_sources() {
 	return $result;
 }
 
+/**
+ * Get a readable name for an IDentity Provider (IDP).
+ *
+ * The names can be provided in translation files by adding the key 'simplesaml:idp:label:<idp name>'.
+ *
+ * @param string $idp_source the name of the IDP
+ *
+ * @return string a readable name
+ */
 function simplesaml_get_idp_label($idp_source) {
 	$result = $idp_source;
 
