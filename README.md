@@ -20,6 +20,11 @@ Features
 - Link existing account to multiple external accounts 
 - Force authentication to an external IDP  
 	All your users will be forced to login using the configured external IDP
+- Automaticly create user accounts based on the information provided by the external IDP  
+	This requires that the following attributes are set in the configuration of the SP
+	- elgg:email => the email address of the user
+	- elgg:firstname or elgg:lastname => because we need to create a displayname
+	- elgg:external_id => to link the newly created account to the external account
 
 ToDo
 ---- 

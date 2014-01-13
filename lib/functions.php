@@ -644,7 +644,7 @@ function simplesaml_get_idp_label($idp_source) {
 }
 
 /**
- * This function checks if authentication needs to be forces over an authentication source
+ * This function checks if authentication needs to be forces over an authentication source.
  *
  * @return void
  */
@@ -669,4 +669,41 @@ function simplesaml_check_force_authentication() {
 			}
 		}
 	}
+}
+
+/**
+ * Check if auto creation of accounts is enabled for this source and we have all the required information.
+ *
+ * The required information is:
+ * - email address (needed for all accounts in Elgg)
+ * - firstname and/or lastname (for the displayname)
+ * - external_id (so we can link accounts)
+ *
+ * @param string $source the name of the authentication source
+ * @param array $auth_attributes the authentication attributes
+ *
+ * @return bool true is allowed and enough information, false otherwise
+ */
+function simplesaml_check_auto_create_account($source, $auth_attributes) {
+	$result = false;
+	
+	if (!empty($source) && !empty($auth_attributes) && is_array($auth_attributes)) {
+		// is the source enabled
+		if (simplesaml_is_enabled_source($source)) {
+			// check if auto create is enabled for this source
+			if (elgg_get_plugin_setting($source . "_auto_create_accounts", "simplesaml")) {
+				// do we have all the require information
+				$email = elgg_extract("elgg:email", $auth_attributes);
+				$firstname = elgg_extract("elgg:firstname", $auth_attributes);
+				$lastname = elgg_extract("elgg:lastname", $auth_attributes);
+				$external_id = elgg_extract("elgg:external_id", $auth_attributes);
+				
+				if (!empty($email) && (!empty($firstname) || !empty($lastname)) && !empty($external_id)) {
+					$result = true;
+				}
+			}
+		}
+	}
+	
+	return $result;
 }

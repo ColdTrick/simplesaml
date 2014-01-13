@@ -31,6 +31,7 @@ if (is_callable("simplesaml_get_configured_sources")) {
 		$content .= "<th>" . elgg_echo("simplesaml:settings:sources:name") . "</th>";
 		$content .= "<th>" . elgg_echo("simplesaml:settings:sources:type") . "</th>";
 		$content .= "<th class='center'>" . elgg_echo("simplesaml:settings:sources:allow_registration") . "</th>";
+		$content .= "<th class='center'>" . elgg_echo("simplesaml:settings:sources:auto_create_accounts") . "</th>";
 		$content .= "<th class='center'>" . elgg_echo("simplesaml:settings:sources:save_attributes") . "</th>";
 		$content .= "<th class='center'>" . elgg_echo("simplesaml:settings:sources:force_authentication") . "</th>";
 		$content .= "</tr>";
@@ -39,6 +40,7 @@ if (is_callable("simplesaml_get_configured_sources")) {
 			$source_auth_id = $source->getAuthId();
 			$enabled = array();
 			$registration = array();
+			$auto_create_accounts = array();
 			$save_attributes = array();
 			$force_authentication = array();
 			
@@ -78,6 +80,10 @@ if (is_callable("simplesaml_get_configured_sources")) {
 				$registration = array("checked" => "checked");
 			}
 			
+			if ($plugin->getSetting($source_auth_id . "_auto_create_accounts")) {
+				$auto_create_accounts = array("checked" => "checked");
+			}
+			
 			if ($plugin->getSetting($source_auth_id . "_save_attributes")) {
 				$save_attributes = array("checked" => "checked");
 			}
@@ -91,6 +97,7 @@ if (is_callable("simplesaml_get_configured_sources")) {
 			$content .= "<td>" . $source_auth_id . "</td>";
 			$content .= "<td>" . $source_type_label . "</td>";
 			$content .= "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source_auth_id . "_allow_registration]", "value" => "1") + $registration) . "</td>";
+			$content .= "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source_auth_id . "_auto_create_accounts]", "value" => "1") + $auto_create_accounts) . "</td>";
 			$content .= "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source_auth_id . "_save_attributes]", "value" => "1") + $save_attributes) . "</td>";
 			$content .= "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[force_authentication]", "value" => $source_auth_id) + $force_authentication) . "</td>";
 			$content .= "</tr>";

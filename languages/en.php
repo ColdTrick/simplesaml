@@ -31,6 +31,7 @@ $english = array(
 	'simplesaml:settings:sources:name' => "Authentication source",
 	'simplesaml:settings:sources:type' => "Type",
 	'simplesaml:settings:sources:allow_registration' => "Allow registration",
+	'simplesaml:settings:sources:auto_create_accounts' => "Automaticly create accounts",
 	'simplesaml:settings:sources:save_attributes' => "Save authentication attributes",
 	'simplesaml:settings:sources:force_authentication' => "Force authentication",
 	

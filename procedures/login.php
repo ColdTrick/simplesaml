@@ -65,10 +65,17 @@ if (!elgg_is_logged_in()) {
 					unset($_SESSION["saml_source"]);
 					
 				} else {
-					// no user found, so forward to a different page
-					$forward_url = "saml/no_linked_account/" . $source;
-					
-					system_message(elgg_echo("simplesaml:login:no_linked_account", array($label)));
+					// check if we can automaticly create an account for this user
+					if (simplesaml_check_auto_create_account($source, $saml_attributes)) {
+						// we have enough information to create the account so let's do that
+						$forward_url = "action/simplesaml/register?saml_source=" . $source;
+						$forward_url = elgg_add_action_tokens_to_url($forward_url);
+					} else {
+						// no user found, so forward to a different page
+						$forward_url = "saml/no_linked_account/" . $source;
+						
+						system_message(elgg_echo("simplesaml:login:no_linked_account", array($label)));
+					}
 				}
 				
 				// restore hidden settings
