@@ -34,6 +34,12 @@ function simplesaml_init() {
 	require_once(dirname(__FILE__) . "/lib/hooks.php");
 	require_once(dirname(__FILE__) . "/lib/page_handlers.php");
 	
+	// check for force authentication
+	simplesaml_check_force_authentication();
+	
+	// extend CSS/JS
+	elgg_extend_view("js/admin", "js/simplesaml/admin");
+	
 	// allow login
 	elgg_extend_view("forms/login", "simplesaml/login");
 	

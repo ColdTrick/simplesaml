@@ -22,8 +22,9 @@ if (is_callable("simplesaml_get_configured_sources")) {
 	
 	if (!empty($sources)) {
 		$enabled_sources = array();
+		$first_source = true;
 		
-		$content = "<table class='elgg-table mbm'>";
+		$content = "<table class='elgg-table mbm' id='simplesaml-settings-sources'>";
 		
 		$content .= "<tr>";
 		$content .= "<th class='center'>" . elgg_echo("enable") . "</th>";
@@ -31,6 +32,7 @@ if (is_callable("simplesaml_get_configured_sources")) {
 		$content .= "<th>" . elgg_echo("simplesaml:settings:sources:type") . "</th>";
 		$content .= "<th class='center'>" . elgg_echo("simplesaml:settings:sources:allow_registration") . "</th>";
 		$content .= "<th class='center'>" . elgg_echo("simplesaml:settings:sources:save_attributes") . "</th>";
+		$content .= "<th class='center'>" . elgg_echo("simplesaml:settings:sources:force_authentication") . "</th>";
 		$content .= "</tr>";
 		
 		foreach ($sources as $source) {
@@ -38,6 +40,12 @@ if (is_callable("simplesaml_get_configured_sources")) {
 			$enabled = array();
 			$registration = array();
 			$save_attributes = array();
+			$force_authentication = array();
+			
+			if (!$first_source) {
+				// no default value after the first force checkbox
+				$force_authentication["default"] = false;
+			}
 			
 			switch (get_class($source)) {
 				case "sspmod_saml_Auth_Source_SP":
@@ -74,13 +82,21 @@ if (is_callable("simplesaml_get_configured_sources")) {
 				$save_attributes = array("checked" => "checked");
 			}
 			
+			if ($plugin->getSetting("force_authentication") == $source_auth_id) {
+				$force_authentication["checked"] = "checked";
+			}
+			
 			$content .= "<tr>";
 			$content .= "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source_auth_id . "_enabled]", "value" => "1") + $enabled) . "</td>";
 			$content .= "<td>" . $source_auth_id . "</td>";
 			$content .= "<td>" . $source_type_label . "</td>";
 			$content .= "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source_auth_id . "_allow_registration]", "value" => "1") + $registration) . "</td>";
 			$content .= "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source_auth_id . "_save_attributes]", "value" => "1") + $save_attributes) . "</td>";
+			$content .= "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[force_authentication]", "value" => $source_auth_id) + $force_authentication) . "</td>";
 			$content .= "</tr>";
+			
+			// set a flag so we know we had at least 1 source
+			$first_source = false;
 		}
 		
 		$content .= "</table>";

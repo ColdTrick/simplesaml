@@ -642,3 +642,31 @@ function simplesaml_get_idp_label($idp_source) {
 
 	return $result;
 }
+
+/**
+ * This function checks if authentication needs to be forces over an authentication source
+ *
+ * @return void
+ */
+function simplesaml_check_force_authentication() {
+	// did we do this check already
+	if (!isset($_SESSION["simplesaml_force_authentication"])) {
+		// set a flag so we don't do this again (this session)
+		$_SESSION["simplesaml_force_authentication"] = true;
+		
+		// only needed for non-logged in users
+		if (!elgg_is_logged_in()) {
+			// get the plugin setting that defines force authentications
+			$setting = elgg_get_plugin_setting("force_authentication", "simplesaml");
+			if (!empty($setting)) {
+				// check if the authentication source is enabled
+				if (simplesaml_is_enabled_source($setting)) {
+					// try the out login procedure
+					$page = array("login", $setting);
+					
+					simplesaml_page_handler($page);
+				}
+			}
+		}
+	}
+}

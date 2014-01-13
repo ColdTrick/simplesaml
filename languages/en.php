@@ -32,6 +32,7 @@ $english = array(
 	'simplesaml:settings:sources:type' => "Type",
 	'simplesaml:settings:sources:allow_registration' => "Allow registration",
 	'simplesaml:settings:sources:save_attributes' => "Save authentication attributes",
+	'simplesaml:settings:sources:force_authentication' => "Force authentication",
 	
 	'simplesaml:settings:sources:configuration:title' => "Configuration settings for: %s",
 	'simplesaml:settings:sources:configuration:icon' => "URL to an icon for this connection (optional)",
