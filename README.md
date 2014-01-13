@@ -25,6 +25,10 @@ Features
 	- elgg:email => the email address of the user
 	- elgg:firstname or elgg:lastname => because we need to create a displayname
 	- elgg:external_id => to link the newly created account to the external account
+- Automaticly link existing users based on their profile information and information from the IDP  
+	This requires that the following attributes are set in the configuration of the SP
+	- elgg:external_id => the unique ID of the user on the IDP side
+	- elgg:auto_link => the value that the configured profile field must have to automaticly link the user
 
 ToDo
 ---- 

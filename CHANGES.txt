@@ -6,6 +6,7 @@ x.x:
 - added: support for CAS #6
 - added: support for force authentication #4
 - added: a setting to automaticly create accounts based on the IDP information #3
+- added: support for automaticly linking IDP accounts to existing Elgg accounts #5
 
 1.2 (2013-10-14):
 

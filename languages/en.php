@@ -40,6 +40,9 @@ $english = array(
 	'simplesaml:settings:sources:configuration:icon:description' => "You can provide an URL to an icon for this connection, it will be used on the login screen and the user settings page.",
 	'simplesaml:settings:sources:configuration:external_id' => "Field with the unique user id from the SAML connection (optional)",
 	'simplesaml:settings:sources:configuration:external_id:description' => "If you can't get the unique user id from the attributes, you can provide a field from the AuthData which contains the user id",
+	'simplesaml:settings:sources:configuration:auto_link' => "Automaticly link existing accounts based on profile information (optional)",
+	'simplesaml:settings:sources:configuration:auto_link:description' => "If the external authentication source provides the configured profile information, both accounts will be linked automaticly.",
+	'simplesaml:settings:sources:configuration:auto_link:none' => "Don't allow automatic linking",
 	
 	'simplesaml:settings:warning:configuration:sources' => "No authentication sources have been configured yet",
 	'simplesaml:settings:warning:configuration:simplesamlphp' => "Please provide the path to the SimpleSAMLPHP library for further configuration options",

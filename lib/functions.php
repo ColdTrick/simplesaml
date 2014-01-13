@@ -158,6 +158,7 @@ function simplesaml_find_user($source, $saml_attributes) {
 		}
 		
 		if (!empty($saml_uid)) {
+			// first check if we can find a user based on an existing link
 			$options = array(
 				"type" => "user",
 				"limit" => 1,
@@ -171,6 +172,62 @@ function simplesaml_find_user($source, $saml_attributes) {
 			$users = elgg_get_entities_from_plugin_user_settings($options);
 			if (!empty($users)) {
 				$result = $users[0];
+			}
+			
+			// no user found, can we auto link
+			if (empty($result)) {
+				// are we allowed to link an existing account based on information from the IDP
+				$profile_field = elgg_get_plugin_setting($source . "_auto_link", "simplesaml");
+				// is the external information provided
+				$auto_link_value = elgg_extract("elgg:auto_link", $saml_attributes);
+				
+				if (!empty($profile_field) && !empty($auto_link_value)) {
+					switch ($profile_field) {
+						case "username":
+							// find user based on username
+							$user = get_user_by_username($auto_link_value);
+							if (!empty($user)) {
+								$result = $user;
+							}
+							
+							break;
+						case "email":
+							// find user based on email address
+							$users = get_user_by_email($auto_link_value);
+							if (!empty($users) && (count($users) == 1)) {
+								$result = $users[0];
+							}
+							
+							break;
+						default:
+							// find user based on profile information
+							$ia = elgg_set_ignore_access(true);
+							
+							$options = array(
+								"type" => "user",
+								"limit" => false,
+								"site_guids" => false,
+								"metadata_name_value_pairs" => array(
+									"name" => $profile_field,
+									"value" => $auto_link_value
+								)
+							);
+							
+							$users = elgg_get_entities_from_metadata($options);
+							if (!empty($users) && (count($users) == 1)) {
+								// only found 1 user so this is ok
+								$result = $users[0];
+							}
+							
+							// restore access
+							elgg_set_ignore_access($ia);
+					}
+					
+					if (!empty($result)) {
+						// we have a result, so link the user for future use
+						simplesaml_link_user($result, $source, $saml_uid);
+					}
+				}
 			}
 		}
 	}
@@ -481,6 +538,7 @@ function simplesaml_save_authentication_attributes(ElggUser $user, $saml_source,
 				unset($attributes["elgg:email"]);
 				unset($attributes["elgg:external_id"]);
 				unset($attributes["elgg:username"]);
+				unset($attributes["elgg:auto_link"]);
 	
 				elgg_set_plugin_user_setting($saml_source . "_attributes", json_encode($attributes), $user->getGUID(), "simplesaml");
 			}

@@ -112,6 +112,27 @@ if (is_callable("simplesaml_get_configured_sources")) {
 		
 		// settings for enabled sources
 		if (!empty($enabled_sources)) {
+			// build options to automaticly link accounts based on profile information
+			$auto_link_options = array(
+				"0" => elgg_echo("simplesaml:settings:sources:configuration:auto_link:none"),
+				"username" => elgg_echo("username"),
+				"email" => elgg_echo("email")
+			);
+			// add profile fields
+			$profile_fields = elgg_get_config("profile_fields");
+			if (!empty($profile_fields) && is_array($profile_fields)) {
+				foreach ($profile_fields as $name => $type) {
+					$profile_label = $name;
+					$profile_translation = elgg_echo("profile:" . $name);
+					
+					if ($profile_translation != $profile_label) {
+						$profile_label = $profile_translation;
+					}
+					
+					$auto_link_options[$name] = $profile_label;
+				}
+			}
+			
 			// enabled sources are grouped by type
 			foreach ($enabled_sources as $source_type => $sources) {
 				// make sure we have sources of this type
@@ -125,6 +146,12 @@ if (is_callable("simplesaml_get_configured_sources")) {
 						$body .= elgg_echo("simplesaml:settings:sources:configuration:icon");
 						$body .= elgg_view("input/url", array("name" => "params[" . $source . "_icon_url]", "value" => $plugin->getSetting($source . "_icon_url")));
 						$body .= "<div class='elgg-subtext'>" . elgg_echo("simplesaml:settings:sources:configuration:icon:description") . "</div>";
+						$body .= "</div>";
+						
+						$body .= "<div>";
+						$body .= elgg_echo("simplesaml:settings:sources:configuration:auto_link") . "<br />";
+						$body .= elgg_view("input/dropdown", array("name" => "params[" . $source . "_auto_link]", "value" => $plugin->getSetting($source . "_auto_link"), "options_values" => $auto_link_options));
+						$body .= "<div class='elgg-subtext'>" . elgg_echo("simplesaml:settings:sources:configuration:auto_link:description") . "</div>";
 						$body .= "</div>";
 						
 						if ($source_type == "saml") {
