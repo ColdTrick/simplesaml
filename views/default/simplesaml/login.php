@@ -1,7 +1,7 @@
 <?php
 
 $sources = simplesaml_get_enabled_sources();
-if (!empty($source)) {
+if (!empty($sources)) {
 	
 	foreach ($sources as $source) {
 		$label = simplesaml_get_source_label($source);
