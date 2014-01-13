@@ -39,9 +39,21 @@ function simplesaml_get_configured_sources() {
 		$result = false;
 		
 		if (class_exists("SimpleSAML_Auth_Source")) {
+			// get SAML sources
 			$sources = SimpleSAML_Auth_Source::getSourcesOfType("saml:SP");
 			if (!empty($sources)) {
 				$result = $sources;
+			}
+			
+			// get CAS sources
+			$sources = SimpleSAML_Auth_Source::getSourcesOfType("cas:CAS");
+			if (!empty($sources)) {
+				// check if we need to merge
+				if (!empty($result)) {
+					$result = array_merge($result, $sources);
+				} else {
+					$result = $sources;
+				}
 			}
 		}
 	}
@@ -229,11 +241,16 @@ function simplesaml_get_authentication_attributes(SimpleSAML_Auth_Simple $saml_a
 	if (!empty($saml_auth) && ($saml_auth instanceof SimpleSAML_Auth_Simple) && !empty($source)) {
 		$result = $saml_auth->getAttributes();
 		
-		$setting = elgg_get_plugin_setting($source . "_external_id", "simplesaml");
-		if (!empty($setting)) {
-			$external_id = $saml_auth->getAuthData($setting);
-			if (!empty($external_id)) {
-				$result["elgg:external_id"] = array($external_id["Value"]);
+		$auth_source = $saml_auth->getAuthSource();
+		
+		if ($auth_source instanceof sspmod_saml_Auth_Source_SP) {
+			// only check extra data for SAML sources
+			$setting = elgg_get_plugin_setting($source . "_external_id", "simplesaml");
+			if (!empty($setting)) {
+				$external_id = $saml_auth->getAuthData($setting);
+				if (!empty($external_id)) {
+					$result["elgg:external_id"] = array($external_id["Value"]);
+				}
 			}
 		}
 	}

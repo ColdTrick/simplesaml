@@ -28,6 +28,7 @@ if (is_callable("simplesaml_get_configured_sources")) {
 		$content .= "<tr>";
 		$content .= "<th class='center'>" . elgg_echo("enable") . "</th>";
 		$content .= "<th>" . elgg_echo("simplesaml:settings:sources:name") . "</th>";
+		$content .= "<th>" . elgg_echo("simplesaml:settings:sources:type") . "</th>";
 		$content .= "<th class='center'>" . elgg_echo("simplesaml:settings:sources:allow_registration") . "</th>";
 		$content .= "<th class='center'>" . elgg_echo("simplesaml:settings:sources:save_attributes") . "</th>";
 		$content .= "</tr>";
@@ -38,10 +39,31 @@ if (is_callable("simplesaml_get_configured_sources")) {
 			$registration = array();
 			$save_attributes = array();
 			
+			switch (get_class($source)) {
+				case "sspmod_saml_Auth_Source_SP":
+					$source_type = "saml";
+					$source_type_label = elgg_echo("simplesaml:source:type:saml");
+					break;
+				case "sspmod_cas_Auth_Source_CAS":
+					$source_type = "cas";
+					$source_type_label = elgg_echo("simplesaml:source:type:cas");
+					break;
+				default:
+					$source_type = false;
+					$source_type_label = elgg_echo("simplesaml:source:type:unknown");
+					break;
+			}
+			
 			if ($plugin->getSetting($source_auth_id . "_enabled")) {
 				$enabled = array("checked" => "checked");
 				
-				$enabled_sources[] = $source_auth_id;
+				if ($source_type) {
+					if (!isset($enabled_sources[$source_type])) {
+						$enabled_sources[$source_type] = array();
+					}
+					
+					$enabled_sources[$source_type][] = $source_auth_id;
+				}
 			}
 			
 			if ($plugin->getSetting($source_auth_id . "_allow_registration")) {
@@ -55,6 +77,7 @@ if (is_callable("simplesaml_get_configured_sources")) {
 			$content .= "<tr>";
 			$content .= "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source_auth_id . "_enabled]", "value" => "1") + $enabled) . "</td>";
 			$content .= "<td>" . $source_auth_id . "</td>";
+			$content .= "<td>" . $source_type_label . "</td>";
 			$content .= "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source_auth_id . "_allow_registration]", "value" => "1") + $registration) . "</td>";
 			$content .= "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source_auth_id . "_save_attributes]", "value" => "1") + $save_attributes) . "</td>";
 			$content .= "</tr>";
@@ -66,24 +89,33 @@ if (is_callable("simplesaml_get_configured_sources")) {
 		
 		// settings for enabled sources
 		if (!empty($enabled_sources)) {
-			
-			foreach ($enabled_sources as $source) {
-				$label = simplesaml_get_source_label($source);
-				$title = elgg_echo("simplesaml:settings:sources:configuration:title", array($label));
-				
-				$body = "<div>";
-				$body .= elgg_echo("simplesaml:settings:sources:configuration:icon");
-				$body .= elgg_view("input/url", array("name" => "params[" . $source . "_icon_url]", "value" => $plugin->getSetting($source . "_icon_url")));
-				$body .= "<div class='elgg-subtext'>" . elgg_echo("simplesaml:settings:sources:configuration:icon:description") . "</div>";
-				$body .= "</div>";
-				
-				$body .= "<div>";
-				$body .= elgg_echo("simplesaml:settings:sources:configuration:external_id");
-				$body .= elgg_view("input/text", array("name" => "params[" . $source . "_external_id]", "value" => $plugin->getSetting($source . "_external_id")));
-				$body .= "<div class='elgg-subtext'>" . elgg_echo("simplesaml:settings:sources:configuration:external_id:description") . "</div>";
-				$body .= "</div>";
-				
-				echo elgg_view_module("inline", $title, $body);
+			// enabled sources are grouped by type
+			foreach ($enabled_sources as $source_type => $sources) {
+				// make sure we have sources of this type
+				if (!empty($sources) && is_array($sources)) {
+					// go through all sources of this type
+					foreach ($sources as $source) {
+						$label = simplesaml_get_source_label($source);
+						$title = elgg_echo("simplesaml:settings:sources:configuration:title", array($label));
+						
+						$body = "<div>";
+						$body .= elgg_echo("simplesaml:settings:sources:configuration:icon");
+						$body .= elgg_view("input/url", array("name" => "params[" . $source . "_icon_url]", "value" => $plugin->getSetting($source . "_icon_url")));
+						$body .= "<div class='elgg-subtext'>" . elgg_echo("simplesaml:settings:sources:configuration:icon:description") . "</div>";
+						$body .= "</div>";
+						
+						if ($source_type == "saml") {
+							// only SAML sources have this information
+							$body .= "<div>";
+							$body .= elgg_echo("simplesaml:settings:sources:configuration:external_id");
+							$body .= elgg_view("input/text", array("name" => "params[" . $source . "_external_id]", "value" => $plugin->getSetting($source . "_external_id")));
+							$body .= "<div class='elgg-subtext'>" . elgg_echo("simplesaml:settings:sources:configuration:external_id:description") . "</div>";
+							$body .= "</div>";
+						}
+						
+						echo elgg_view_module("inline", $title, $body);
+					}
+				}
 			}
 		}
 	} else {

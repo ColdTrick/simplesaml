@@ -3,6 +3,7 @@
 x.x:
 
 - added: support for IDP provided username #2
+- added: support for CAS #6
 
 1.2 (2013-10-14):
 
