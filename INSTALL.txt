@@ -2,11 +2,13 @@
 
 This installation instruction is mostly beased on SimpleSAMLPHP v1.5 some parts could be different in newer versions.
 
+In order to use a CAS server as the IDentity Provider you'll need SimpleSAMLPHP version >= 1.6
+
 == Step 1: SimpleSAMLPHP installation ==
 
-Also see http://simplesamlphp.org/docs/1.5/simplesamlphp-install
+Also see <http://simplesamlphp.org/docs/1.5/simplesamlphp-install>
 
-1. Download the SimpleSAMLPHP library from http://simplesamlphp.org/download, we recommend you use the 1.9.2 release.
+1. Download the SimpleSAMLPHP library from <http://simplesamlphp.org/download>, we recommend you use the latest stable release.
 2. Upload the contents of the release to your webserver OUTSIDE the webdirectory (eq htdocs)
 3. Add an alias to your website configuration /simplesaml which points to the www directory in the SimpleSAMLPHP installation
 4. Edit /config/config.php and fill in the following options
@@ -25,12 +27,13 @@ Follow these instructions of you want to login to your Elgg site by using an oth
 
 === Step 2.1: SimpleSAMLPHP configuration ===
 
-Also see http://simplesamlphp.org/docs/1.5/simplesamlphp-sp
+==== 2.1.1 Connecting to a SAML IDentity Provider ====
+Also see <http://simplesamlphp.org/docs/1.5/simplesamlphp-sp>
 
 1. generate a SSL certificate in the /cert directory
 	- example command: openssl req -newkey rsa:2048 -new -x509 -days 3652 -nodes -out saml.crt -keyout saml.pem
 2. For each IDP you wish to connect to:
-	- add a new config to /config/authsources.php (see http://simplesamlphp.org/docs/1.5/simplesamlphp-sp#section_1)
+	- add a new config to /config/authsources.php (see <http://simplesamlphp.org/docs/1.5/simplesamlphp-sp#section_1>)
 		- The config also needs to return some extra field, this can be copied/created from the return result
 		- The Elgg plugin can handle
 			- elgg:firstname => The firstname (givenname) of the user
@@ -39,6 +42,20 @@ Also see http://simplesamlphp.org/docs/1.5/simplesamlphp-sp
 			- elgg:external_id => a persistend unique id for this user (required, but can also be collected in a different way)
 			- elgg:username => a unique username for the user. This will be used when creating a user (if still available in Elgg)
 	- add the new entityID to /metadata/saml20-idp-remote.php (see http://simplesamlphp.org/docs/1.5/simplesamlphp-sp#section_2)
+
+==== 2.1.2 Connecting to a CAS IDentity Provider ====
+Also see <http://simplesamlphp.org/docs/1.6/cas:cas>
+
+1. enable CAS support by creating a file 'enable' in /modules/cas
+2. For each IDP you wish to connect to:
+	- add a new config to /config/authsources.php (see <http://simplesamlphp.org/docs/1.6/cas:cas#section_2>)
+		- The config also needs to return some extra field, this can be copied/created from the return result
+		- The Elgg plugin can handle
+			- elgg:firstname => The firstname (givenname) of the user
+			- elgg:lastname => the lastname (surname) of the user (optional)
+			- elgg:email => the email address of the user (optional, when missing will be asked)
+			- elgg:external_id => a persistend unique id for this user (required, but can also be collected in a different way)
+			- elgg:username => a unique username for the user. This will be used when creating a user (if still available in Elgg)
 
 === Step 2.2: Elgg configuration, first part ===
 
@@ -63,7 +80,7 @@ If you want your Elgg site to be the authentication system for some other site, 
 
 === Step 3.1: SimpleSAMLPHP configuration ===
 
-Also see http://simplesamlphp.org/docs/1.5/simplesamlphp-idp
+Also see <http://simplesamlphp.org/docs/1.5/simplesamlphp-idp>
 
 1. In config/config.php enable 'enable.saml20-idp'
 2. Copy the contents of mod/simplesaml/vendors/simplesaml/modules to the modules directory of your SimpleSAMLPHP directory.
@@ -78,12 +95,12 @@ Also see http://simplesamlphp.org/docs/1.5/simplesamlphp-idp
 4. Edit metadata/saml20-idp-hosted.php to setup the IDP
 	- you can use this example:
 	
-	`$metadata['__DYNAMIC:1__'] = array(
-		'host' => '__DEFAULT__',
-		'privatekey' => '<your private certificate key>',
-		'certificate' => '<your private certificate>',
-		'auth' => '<the name you configured above>',
-	);`
+		`$metadata['__DYNAMIC:1__'] = array(
+			'host' => '__DEFAULT__',
+			'privatekey' => '<your private certificate key>',
+			'certificate' => '<your private certificate>',
+			'auth' => '<the name you configured above>',
+		);`
 5. For each Service Provider you wish to support you need to include a config in metadata/saml20-sp-remove.php
 
 === Step 3.2: Elgg configuration === 
