@@ -1,6 +1,6 @@
 = Version History =
 
-x.x:
+1.3 (2013.01.13):
 
 - added: support for IDP provided username #2
 - added: support for CAS #6
