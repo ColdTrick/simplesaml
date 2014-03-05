@@ -62,6 +62,9 @@ if (!elgg_is_logged_in()) {
 				}
 				
 				$username = elgg_extract("elgg:username", $saml_attributes);
+				if (is_array($username)) {
+					$username = $username[0];
+				}
 				
 				// register user
 				if (empty($error)) {
