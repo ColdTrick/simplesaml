@@ -101,7 +101,6 @@ if (!elgg_is_logged_in()) {
 								$forward_url = "";
 							}
 						} catch(Exception $e){
-							//register_error($e->getMessage());
 							$forward_url = "";
 						}
 					}
