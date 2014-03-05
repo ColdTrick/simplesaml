@@ -707,25 +707,32 @@ function simplesaml_get_idp_label($idp_source) {
  * @return void
  */
 function simplesaml_check_force_authentication() {
-	// did we do this check already
-	if (!isset($_SESSION["simplesaml_force_authentication"])) {
-		// set a flag so we don't do this again (this session)
-		$_SESSION["simplesaml_force_authentication"] = true;
-		
-		// only needed for non-logged in users
-		if (!elgg_is_logged_in()) {
-			// get the plugin setting that defines force authentications
-			$setting = elgg_get_plugin_setting("force_authentication", "simplesaml");
-			if (!empty($setting)) {
-				// check if the authentication source is enabled
-				if (simplesaml_is_enabled_source($setting)) {
-					// make sure we can forward you to the correct url
-					if (!isset($_SESSION["last_forward_from"])) {
-						$_SESSION["last_forward_from"] = current_page_url();
-					}
-					forward("saml/login/" . $setting);
-				}
+	if (elgg_is_logged_in()) {
+		// no need to do anything if already logged in
+		return;
+	}
+	
+	if (isset($_GET["disable_sso"])) {
+		// bypass for sso
+		return;
+	}
+	
+	if (strpos(current_page_url(), elgg_get_site_url() . "saml/no_linked_account") === 0) {
+		// do not force authentication on the no_linked_account page
+		return;
+	}
+	
+	// get the plugin setting that defines force authentications
+	$setting = elgg_get_plugin_setting("force_authentication", "simplesaml");
+	if (!empty($setting)) {
+		// check if the authentication source is enabled
+		if (simplesaml_is_enabled_source($setting)) {
+				
+			// make sure we can forward you to the correct url
+			if (!isset($_SESSION["last_forward_from"])) {
+				$_SESSION["last_forward_from"] = current_page_url();
 			}
+			forward("saml/login/" . $setting);
 		}
 	}
 }

@@ -39,7 +39,8 @@ function simplesaml_init() {
 	require_once(dirname(__FILE__) . "/lib/page_handlers.php");
 	
 	// check for force authentication
-	simplesaml_check_force_authentication();
+	elgg_extend_view("page/default", "simplesaml/force_authentication", 200);
+	elgg_extend_view("page/walled_garden", "simplesaml/force_authentication", 200);
 	
 	// extend CSS/JS
 	elgg_extend_view("js/admin", "js/simplesaml/admin");
