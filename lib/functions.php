@@ -719,6 +719,10 @@ function simplesaml_check_force_authentication() {
 			if (!empty($setting)) {
 				// check if the authentication source is enabled
 				if (simplesaml_is_enabled_source($setting)) {
+					// make sure we can forward you to the correct url
+					if (!isset($_SESSION["last_forward_from"])) {
+						$_SESSION["last_forward_from"] = current_page_url();
+					}
 					forward("saml/login/" . $setting);
 				}
 			}
