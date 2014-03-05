@@ -7,8 +7,8 @@
 /**
  * Take some actions during the login event of a user
  *
- * @param string $event 'login' is the event this function handles
- * @param string $type 'user' is the type for this event
+ * @param string   $event  'login' is the event this function handles
+ * @param string   $type   'user' is the type for this event
  * @param ElggUser $object the current user trying to login
  *
  * @return void

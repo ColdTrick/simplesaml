@@ -143,8 +143,8 @@ function simplesaml_is_enabled_source($source) {
 /**
  * Check if we can find a user that is linked to the user provided by the Service Provider (SP).
  *
- * @param string $source the name of the SP
- * @param array $saml_attributes an array with the attributes provided by the SP configuration
+ * @param string $source          the name of the SP
+ * @param array  $saml_attributes an array with the attributes provided by the SP configuration
  *
  * @return bool|ElggUser the user that is linked, false if no user could be found
  */
@@ -288,7 +288,7 @@ function simplesaml_unextend_login_form() {
  * - etc.
  *
  * @param SimpleSAML_Auth_Simple $saml_auth the Authentication object from the SimpleSAMLPHP library
- * @param string $source the name of the Service Provider
+ * @param string                 $source    the name of the Service Provider
  *
  * @return bool|array an array with the provided attributes, false on failure
  */
@@ -318,9 +318,9 @@ function simplesaml_get_authentication_attributes(SimpleSAML_Auth_Simple $saml_a
 /**
  * Link a user to a Service Provider (SP), so in the future the user can login using this SP.
  *
- * @param ElggUser $user the user to link
- * @param string $saml_source the name of the SP
- * @param string $saml_uid the unique ID of the user on the IDentity Provider side
+ * @param ElggUser $user        the user to link
+ * @param string   $saml_source the name of the SP
+ * @param string   $saml_uid    the unique ID of the user on the IDentity Provider side
  *
  * @return bool true is the user is successfully linked, false on failure
  */
@@ -358,8 +358,8 @@ function simplesaml_link_user(ElggUser $user, $saml_source, $saml_uid) {
 /**
  * Remove an existing link between the user and a Service Provider (SP).
  *
- * @param ElggUser $user the user to unlink
- * @param string $saml_source the name of the SP
+ * @param ElggUser $user        the user to unlink
+ * @param string   $saml_source the name of the SP
  *
  * @return bool true is the user is unlinked, false on failure
  */
@@ -380,11 +380,11 @@ function simplesaml_unlink_user(ElggUser $user, $saml_source) {
 /**
  * Register a user in Elgg based on information provided by the Service Provider (SP).
  *
- * @param string $name the (display)name of the new user
- * @param string $email the email address of the user
+ * @param string $name        the (display)name of the new user
+ * @param string $email       the email address of the user
  * @param string $saml_source the name of the SP this information came from
- * @param bool $validate do we need to validate the email address of this new users
- * @param string $username the username provided by the SP (optional)
+ * @param bool   $validate    do we need to validate the email address of this new users
+ * @param string $username    the username provided by the SP (optional)
  *
  * @return bool|ElggUser the new user, false on failure
  */
@@ -516,9 +516,9 @@ function simplesaml_generate_unique_username($username) {
 /**
  * Save the authenticaion attributes provided by the Service Provider (SP) for later use.
  *
- * @param ElggUser $user the user to store the attributes for
- * @param string $saml_source the name of the Service Provider which provided the attributes
- * @param array|false $attributes the attributes to save, false to remove all attributes
+ * @param ElggUser    $user        the user to store the attributes for
+ * @param string      $saml_source the name of the Service Provider which provided the attributes
+ * @param array|false $attributes  the attributes to save, false to remove all attributes
  *
  * @return void
  */
@@ -549,9 +549,9 @@ function simplesaml_save_authentication_attributes(ElggUser $user, $saml_source,
 /**
  * Get the saved authentication attributes of a user.
  *
- * @param string $saml_source the name of the Service Provided to return the attributes from
+ * @param string      $saml_source    the name of the Service Provided to return the attributes from
  * @param bool|string $attribute_name if provided with an attribute name only that attribute will be returned, otherwise all attributes will be returned
- * @param int $user_guid the user GUID, defaults to the current logged in user
+ * @param int         $user_guid      the user GUID, defaults to the current logged in user
  *
  * @return bool|string|array array with attributes, or a string if attribute_name was provided, false on failure
  */
@@ -737,8 +737,8 @@ function simplesaml_check_force_authentication() {
  * - firstname and/or lastname (for the displayname)
  * - external_id (so we can link accounts)
  *
- * @param string $source the name of the authentication source
- * @param array $auth_attributes the authentication attributes
+ * @param string $source          the name of the authentication source
+ * @param array  $auth_attributes the authentication attributes
  *
  * @return bool true is allowed and enough information, false otherwise
  */

@@ -6,10 +6,10 @@
 /**
  * Extend the allowed pages of your community if it is in walled garden mode.
  *
- * @param string $hook 'public_pages' is the hook name
- * @param string $type 'walled_garden' is the type if this hook
- * @param array $return_value the default return value
- * @param array $params an array with parameter to help extending the result
+ * @param string $hook         'public_pages' is the hook name
+ * @param string $type         'walled_garden' is the type if this hook
+ * @param array  $return_value the default return value
+ * @param array  $params       an array with parameter to help extending the result
  *
  * @return array an array with all the allowed pages
  */
@@ -41,10 +41,10 @@ function simplesaml_walled_garden_hook($hook, $type, $return_value, $params) {
 /**
  * Add widget title link if Widget Manager is enabled.
  *
- * @param string $hook 'widget_url' is the hook name
- * @param string $type 'widget_manager' is the type if this hook
- * @param array $return_value the default return value
- * @param array $params an array with parameter to help extending the result
+ * @param string $hook         'widget_url' is the hook name
+ * @param string $type         'widget_manager' is the type if this hook
+ * @param array  $return_value the default return value
+ * @param array  $params       an array with parameter to help extending the result
  *
  * @return string an url to be put in the widget title
  */
@@ -74,10 +74,10 @@ function simplesaml_widget_url_hook($hook, $type, $return_value, $params) {
  *
  * This is used to save an array as JSON in a plugin setting. This because arrays can't be saved in plugin settings.
  *
- * @param string $hook 'setting' is the hook name
- * @param string $type 'plugin' is the type if this hook
- * @param array $return_value the default return value
- * @param array $params an array with parameter to help extending the result
+ * @param string $hook         'setting' is the hook name
+ * @param string $type         'plugin' is the type if this hook
+ * @param array  $return_value the default return value
+ * @param array  $params       an array with parameter to help extending the result
  *
  * @return string the alternate plugin setting value
  */

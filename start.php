@@ -7,6 +7,8 @@ elgg_register_event_handler("plugins_boot", "system", "simplesaml_plugins_boot")
 
 /**
  * Called on the 'plugins_boot' 'system' event
+ *
+ * @return void
  */
 function simplesaml_plugins_boot() {
 	
@@ -24,6 +26,8 @@ function simplesaml_plugins_boot() {
 
 /**
  * Called on the 'init' 'system' event
+ *
+ * @return void
  */
 function simplesaml_init() {
 	// load libraries
