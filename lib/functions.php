@@ -719,10 +719,7 @@ function simplesaml_check_force_authentication() {
 			if (!empty($setting)) {
 				// check if the authentication source is enabled
 				if (simplesaml_is_enabled_source($setting)) {
-					// try the out login procedure
-					$page = array("login", $setting);
-					
-					simplesaml_page_handler($page);
+					forward("saml/login/" . $setting);
 				}
 			}
 		}
