@@ -83,6 +83,9 @@ if (!elgg_is_logged_in()) {
 							simplesaml_link_user($user, $source, $saml_uid);
 						}
 						
+						// save attributes
+						simplesaml_save_authentication_attributes($user, $source,$saml_attributes);
+						
 						// restore hidden setting
 						access_show_hidden_entities($hidden);
 						
