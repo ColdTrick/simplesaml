@@ -409,21 +409,22 @@ function simplesaml_register_user($name, $email, $saml_source, $validate = false
 			try {
 				$user_guid = register_user($username, $password, $name, $email);
 				if (!empty($user_guid)) {
-					$new_user = get_user($user_guid);
+				$new_user = get_user($user_guid);
 					
-					if ($validate) {
-						$params = array(
-							"user" => $new_user,
-							"password" => $password,
-							"friend_guid" => null,
-							"invitecode" => null
-						);
-						
-						if (!elgg_trigger_plugin_hook("register", "user", $params, true)) {
-							register_error(elgg_echo("registerbad"));
-						} else {
-							$result = $new_user;
-						}
+					if (!$validate) {
+						// no need for extra validation. We trust this user
+						elgg_set_user_validation_status($new_user->getGUID(), true, "simplesaml");
+					}
+					
+					$params = array(
+						"user" => $new_user,
+						"password" => $password,
+						"friend_guid" => null,
+						"invitecode" => null
+					);
+					
+					if (!elgg_trigger_plugin_hook("register", "user", $params, true)) {
+						register_error(elgg_echo("registerbad"));
 					} else {
 						$result = $new_user;
 					}
