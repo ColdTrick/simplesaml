@@ -180,6 +180,9 @@ function simplesaml_find_user($source, $saml_attributes) {
 				$profile_field = elgg_get_plugin_setting($source . "_auto_link", "simplesaml");
 				// is the external information provided
 				$auto_link_value = elgg_extract("elgg:auto_link", $saml_attributes);
+				if (is_array($auto_link_value)) {
+					$auto_link_value = $auto_link_value[0];
+				}
 				
 				if (!empty($profile_field) && !empty($auto_link_value)) {
 					switch ($profile_field) {
