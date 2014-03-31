@@ -101,3 +101,58 @@ function simplesaml_plugin_setting_save_hook($hook, $type, $return_value, $param
 	
 	return $result;
 }
+
+/**
+ * Hook on the logout action to make sure we can logout on SimpleSAML
+ *
+ * @param string $hook         'action'
+ * @param string $type         'logout'
+ * @param bool   $return_value return false to stop the action from executing
+ * @param array  $params       supplied params
+ *
+ * @return void
+ */
+function simplesaml_logout_action_hook($hook, $type, $return_value, $params) {
+	global $SIMPLESAML_SESSION_BACKUP;
+	global $SIMPLESAML_SOURCE;
+
+	if (isset($_SESSION["SimpleSAMLphp_SESSION"])) {
+		// store session data because session is destroyed
+		$SIMPLESAML_SESSION_BACKUP = $_SESSION["SimpleSAMLphp_SESSION"];
+		$SIMPLESAML_SOURCE = $_SESSION["saml_login_source"];
+
+		// after session is destroyed forward to saml logout
+		elgg_register_plugin_hook_handler("forward", "system", "simplesaml_forward_hook");
+	}
+}
+
+/**
+ * Hook on the forward function to make sure we can logout on SimpleSAML
+ *
+ * @param string $hook         'forward'
+ * @param string $type         'system'
+ * @param bool   $return_value the current url to forward to
+ * @param array  $params       supplied params
+ *
+ * @return void
+ */
+function simplesaml_forward_hook($hook, $type, $return_value, $params) {
+	global $SIMPLESAML_SESSION_BACKUP;
+	global $SIMPLESAML_SOURCE;
+	
+	if (!elgg_is_logged_in()) {
+		if (!empty($SIMPLESAML_SESSION_BACKUP) && !empty($SIMPLESAML_SOURCE)) {
+			$_SESSION["SimpleSAMLphp_SESSION"] = $SIMPLESAML_SESSION_BACKUP;
+	
+			// do we have a logout source
+			try {
+				$source = new SimpleSAML_Auth_Simple($SIMPLESAML_SOURCE);
+	
+				// logout of the external source
+				$source->logout(elgg_get_site_url());
+			} catch (Exception $e) {
+				// do nothing
+			}
+		}
+	}
+}

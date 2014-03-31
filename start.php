@@ -61,6 +61,7 @@ function simplesaml_init() {
 	elgg_register_plugin_hook_handler("public_pages", "walled_garden", "simplesaml_walled_garden_hook");
 	elgg_register_plugin_hook_handler("widget_url", "widget_manager", "simplesaml_widget_url_hook");
 	elgg_register_plugin_hook_handler("setting", "plugin", "simplesaml_plugin_setting_save_hook");
+	elgg_register_plugin_hook_handler("action", "logout", "simplesaml_logout_action_hook");
 	
 	// register actions
 	elgg_register_action("simplesaml/register", dirname(__FILE__) . "/actions/register.php", "public");
