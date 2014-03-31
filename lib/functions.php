@@ -412,7 +412,7 @@ function simplesaml_register_user($name, $email, $saml_source, $validate = false
 			try {
 				$user_guid = register_user($username, $password, $name, $email);
 				if (!empty($user_guid)) {
-				$new_user = get_user($user_guid);
+					$new_user = get_user($user_guid);
 					
 					if (!$validate) {
 						// no need for extra validation. We trust this user
