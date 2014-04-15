@@ -1,4 +1,8 @@
 <?php
+/**
+ * The user tried to login to the site by a SAML/CAS source but no linked account was found. Offer
+ * the option to link or create an account
+ */
 
 $source = get_input("saml_source");
 

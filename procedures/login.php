@@ -1,4 +1,7 @@
 <?php
+/**
+ * Login based on a SAML/CAS source
+ */
 
 $forward_url = REFERER;
 

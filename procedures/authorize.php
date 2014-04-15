@@ -1,4 +1,7 @@
 <?php
+/**
+ * Link a logged in user to a SAML/CAS source
+ */
 
 gatekeeper();
 

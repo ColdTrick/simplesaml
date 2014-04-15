@@ -4,6 +4,12 @@
  *
  */
 
+// prevent crashes in the plugin is not yet configured
+if (!is_callable("simplesaml_get_enabled_sources")) {
+	echo elgg_view("output/longtext", array("value" => elgg_echo("simplesaml:error:not_configured")));
+	return true;
+}
+
 $plugin = elgg_extract("entity", $vars);
 $page_owner = elgg_get_page_owner_entity();
 

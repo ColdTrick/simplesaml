@@ -1,4 +1,7 @@
 <?php
+/**
+ * Append the configured SAML/CAS sources to the login form
+ */
 
 $sources = simplesaml_get_enabled_sources();
 if (!empty($sources)) {

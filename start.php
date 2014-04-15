@@ -52,7 +52,7 @@ function simplesaml_init() {
 	elgg_register_page_handler("saml", "simplesaml_page_handler");
 	
 	// register widgets
-	elgg_register_widget_type("simplesaml", elgg_echo("login"), elgg_echo("simplesaml:widget:description"), "index", true);
+	elgg_register_widget_type("simplesaml", elgg_echo("login"), elgg_echo("simplesaml:widget:description"), array("index"), true);
 	
 	// register events
 	elgg_register_event_handler("login", "user", "simplesaml_login_event_handler");

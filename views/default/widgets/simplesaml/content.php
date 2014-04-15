@@ -1,4 +1,13 @@
 <?php
+/**
+ * Show a widget with the login options
+ */
+
+// prevent crashes in the plugin is not yet configured
+if (!is_callable("simplesaml_get_enabled_sources")) {
+	echo elgg_view("output/longtext", array("value" => elgg_echo("simplesaml:error:not_configured")));
+	return true;
+}
 
 $user = elgg_get_logged_in_user_entity();
 if (!empty($user)) {

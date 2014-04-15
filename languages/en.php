@@ -7,6 +7,7 @@ $english = array(
 	'simplesaml:error:source_not_enabled' => "The provided authentication source isn't enabled on this site",
 	'simplesaml:error:source_mismatch' => "The provided authentication source doesn't match the server connection",
 	'simplesaml:error:class' => "Error while getting the authentication source configuration: %s",
+	'simplesaml:error:not_configured' => "This plugin is not yet configured correctly, please contact your site administrator",
 	
 	'simplesaml:source:type:unknown' => "Unknown",
 	'simplesaml:source:type:saml' => "SAML",

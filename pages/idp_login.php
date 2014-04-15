@@ -1,4 +1,9 @@
 <?php
+/**
+ * Show the login form to external users, so they can login to the external site using this sites credentials
+ *
+ * No credentials will be provided to the external site, only a name, email and a generated UID
+ */
 
 // where to go after authentication
 $returnTo = get_input("ReturnTo");

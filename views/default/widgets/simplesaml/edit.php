@@ -1,4 +1,12 @@
 <?php
+/**
+ * Offer the ability to limit the logon widget to only show one SAML/CAS source
+ */
+
+// prevent crashes in the plugin is not yet configured
+if (!is_callable("simplesaml_get_enabled_sources")) {
+	return true;
+}
 
 $sources = simplesaml_get_enabled_sources();
 if (!empty($source)) {

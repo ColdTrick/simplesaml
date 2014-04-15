@@ -1,4 +1,8 @@
 <?php
+/**
+ * The user doesn't (yet) have a linked account in this site.
+ * Depending on the plugin settings offer the option to link and register
+ */
 
 $source = elgg_extract("saml_source", $vars);
 $allow_registration = (bool) elgg_extract("allow_registration", $vars, false);
