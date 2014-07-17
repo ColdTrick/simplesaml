@@ -4,6 +4,7 @@
 	<author>ColdTrick IT Solutions</author>
 	<version>2.0</version>
 	<description>Allows the configuration of an SAML connection between Elgg and a SAML IDP</description>
+	<id>simplesaml</id>
 	<website>http://www.coldtrick.com/</website>
 	<repository>https://github.com/ColdTrick/simplesaml</repository>
 	<bugtracker>https://github.com/ColdTrick/simplesaml/issues</bugtracker>
