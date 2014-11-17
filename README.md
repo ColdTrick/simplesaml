@@ -1,4 +1,4 @@
-SimpleSAML [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/ColdTrick/simplesaml/badges/quality-score.png?s=a48dc5fb7e9ff768373b2edfab24417435ddc1db)](https://scrutinizer-ci.com/g/ColdTrick/simplesaml/)
+SimpleSAML
 ==========
 Connect your site to a SAML/CAS IDentity Provider (IDP) as a Service Provider (SP) or configure your Elgg installation as an IDP.
 
