@@ -63,7 +63,15 @@ if ($sources) {
 					foreach ($attributes as $name => $value) {
 						$body .= "<tr>";
 						$body .= "<td>" . $name . "</td>";
-						$body .= "<td>" . implode(", ", $value) . "</td>";
+						if (count($value) > 1) {
+							$body .= "<td><ul>";
+							foreach ($value as $v) {
+								$body .= "<li>" . $v . "</li>";
+							}
+							$body .= "</ul></td>";
+						} else {
+							$body .= "<td>" . $value[0] . "</td>";
+						}
 						$body .= "</tr>";
 					}
 					
