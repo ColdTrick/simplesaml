@@ -10,7 +10,7 @@ if (!is_callable("simplesaml_get_enabled_sources")) {
 }
 
 $user = elgg_get_logged_in_user_entity();
-if (!empty($user)) {
+if (empty($user)) {
 	$widget = elgg_extract("entity", $vars);
 	
 	// there need to be saml source enaqbled
