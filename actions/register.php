@@ -132,7 +132,10 @@ if (!empty($user)) {
 		} else {
 			$forward_url = "";
 		}
-	} catch(Exception $e){
+	} catch(Exception $e) {
+		// make sure we don't force login
+		$_SESSION["simpleaml_disable_sso"] = true;
+		
 		$forward_url = "";
 	}
 }

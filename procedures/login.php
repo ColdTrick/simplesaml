@@ -75,6 +75,9 @@ if (!$saml_auth->isAuthenticated()) {
 			// report the error
 			register_error($e->getMessage());
 			
+			// make sure we don't force login
+			$_SESSION["simpleaml_disable_sso"] = true;
+			
 			// forward to front page
 			$forward_url = "";
 		}

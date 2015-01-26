@@ -718,6 +718,12 @@ function simplesaml_check_force_authentication() {
 	
 	if (isset($_GET["disable_sso"])) {
 		// bypass for sso
+		$_SESSION["simpleaml_disable_sso"] = true;
+		return;
+	}
+	
+	if (isset($_SESSION["simpleaml_disable_sso"]) && $_SESSION["simpleaml_disable_sso"] === true) {
+		// sso was bypassed on a previous page
 		return;
 	}
 	
