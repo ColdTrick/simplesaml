@@ -4,6 +4,7 @@ Version History
 x.x:
 
 - added: remember login for a SAML connection (admin setting) #12
+- updated the installation instruction to no longer require modification to the core of SimpleSAMLPHP
 
 2.0 (2014-11-17):
 

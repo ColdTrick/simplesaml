@@ -18,12 +18,14 @@ Also see <https://simplesamlphp.org/docs/stable/simplesamlphp-install>
 	- secretsalt => generate a salt for signing of the communication (use a-z0-9) (don't need to remember this)
 	- technicalcontact_name => the name of the webmaster
 	- technicalcontact_email => the email address of the webmaster (error reports wil go here)
-	- language.default => (optional) is different from English
+	- language.default => (optional) if different from English
 	- timezone => Set it to your timezone
-5. Edit /www/_include.php before all code add
-	- require_once(path_to_your_elgg_installation . "/engine/start.php");
-6. As of version 1.12 of the SimpleSAMLPHP library you'll need to edit /lib/SimpleSAML/Session.php
-	- in the class constructor change `$this->sessionId = $sh->newSessionId();` to `$this->sessionId = $sh->getCookieSessionId();`
+5. Session storage (in /config/config.php)
+	- store.type => sql  (this will prevent session conflicts between Elgg and SimpleSAMLPHP)
+	- store.sql.dsn => set this to the correct DSN to store session data in, see http://www.php.net/manual/en/pdo.drivers.php)
+	- store.sql.username => (optional) set username for the session database
+	- store.sql.password => (optional) set password for the session database
+	- store.sql.prefix => (optional) if you have multiple installations of SimpleSAMLPHP writing to the same datasource
 
 Step 2: Configuration as a ServiceProvider
 ------------------------------------------
