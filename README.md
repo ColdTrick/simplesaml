@@ -29,7 +29,5 @@ Features
 	This requires that the following attributes are set in the configuration of the SP
 	- elgg:external_id => the unique ID of the user on the IDP side
 	- elgg:auto_link => the value that the configured profile field must have to automaticly link the user
-
-ToDo
----- 
-- Single Logout support as SP
+- Remember login  
+	Set the remember me cookie so the user doesn't have to authenticate every browser session

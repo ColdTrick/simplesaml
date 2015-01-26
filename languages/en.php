@@ -35,6 +35,7 @@ $english = array(
 	'simplesaml:settings:sources:auto_create_accounts' => "Automaticly create accounts",
 	'simplesaml:settings:sources:save_attributes' => "Save authentication attributes",
 	'simplesaml:settings:sources:force_authentication' => "Force authentication",
+	'simplesaml:settings:sources:remember_me' => "Remember login",
 	
 	'simplesaml:settings:sources:configuration:title' => "Configuration settings for: %s",
 	'simplesaml:settings:sources:configuration:icon' => "URL to an icon for this connection (optional)",

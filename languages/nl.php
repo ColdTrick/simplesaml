@@ -1,10 +1,11 @@
 <?php
 /**
  * This file was created by Translation Editor v2.0
- * On 2014-07-17 10:01
+ * On 2015-01-26 11:29
  */
 
-$language = array (
+return array (
+  'simplesaml:settings:sources:remember_me' => 'Login onthouden',
   'simplesaml:error:not_configured' => 'Deze plugin is nog niet geconfigureerd, neem contact op met de site beheerder',
   'simplesaml:error:no_source' => 'Geen authenticatie bron gedefinieerd',
   'simplesaml:error:source_not_enabled' => 'De opgegeven authenticatie bron is niet ingeschakeld op deze site',
@@ -66,4 +67,3 @@ $language = array (
   'simplesaml:widget:logged_in' => 'Welkom <b>%s</b> op de <b>%s</b> community',
   'simplesaml:action:register:error:displayname' => 'Er is geen weergave naam opgegeven, vul je naam in',
 );
-add_translation("nl", $language);
