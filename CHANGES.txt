@@ -1,5 +1,18 @@
 = Version History =
 
+x.x:
+
+- added: added handling of a logout url in the SAML source
+- added: additional access validation rules based on SAML attributes
+- fixed: fetch correct username to autoregister a user
+- fixed: save saml attributes when autoregistering accounts
+- fixed: instead of executing the pagehandler forward to the login action
+- fixed: correctly set last forwarded from when forcing authentication
+- fixed: correctly validate users that are trusted
+- fixed: correctly get the autolink value
+- fixed: widget showing wrong information
+- changed: move force authentication check to a view
+
 1.3 (2013.01.13):
 
 - added: support for IDP provided username #2
