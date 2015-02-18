@@ -553,7 +553,7 @@ function simplesaml_save_authentication_attributes(ElggUser $user, $saml_source,
 /**
  * Get the saved authentication attributes of a user.
  *
- * @param string      $saml_source    the name of the Service Provided to return the attributes from
+ * @param string      $saml_source    the name of the Service Provider to return the attributes from
  * @param bool|string $attribute_name if provided with an attribute name only that attribute will be returned, otherwise all attributes will be returned
  * @param int         $user_guid      the user GUID, defaults to the current logged in user
  *
@@ -776,4 +776,68 @@ function simplesaml_check_auto_create_account($source, $auth_attributes) {
 	}
 	
 	return $result;
+}
+
+/**
+ * Check the saml attributes for additional access rules
+ *
+ * @param string $saml_source     the name of the Service Provider
+ * @param array  $saml_attributes the return SAML attributes from the IDP
+ *
+ * @return bool
+ */
+function simplesaml_validate_authentication_attributes($saml_source, $saml_attributes) {
+	
+	if (empty($saml_source) || empty($saml_attributes)) {
+		return false;
+	}
+	
+	if (!simplesaml_is_enabled_source($saml_source)) {
+		return false;
+	}
+	
+	// get plugin settings
+	$access_type = elgg_get_plugin_setting($saml_source . "_access_type", "simplesaml");
+	$access_matching = elgg_get_plugin_setting($saml_source . "_access_matching", "simplesaml");
+	$access_field = elgg_get_plugin_setting($saml_source . "_access_field", "simplesaml");
+	$access_value = elgg_get_plugin_setting($saml_source . "_access_value", "simplesaml");
+	
+	if (!in_array($access_type, array("allow", "deny")) || !in_array($access_matching, array("exact", "regex")) || empty($access_field) || empty($access_value)) {
+		// no additional validation configured
+		return true;
+	}
+	
+	if (!isset($saml_attributes[$access_field])) {
+		// field to check doesn't exists in reponse
+		if ($access_type === "deny") {
+			// deny access when the field matches, but no field exists so allowed
+			return true;
+		} else {
+			// allow access when the field matches, but no field exists so denied
+			return false;
+		}
+	}
+	
+	$match_found = false;
+	foreach ($saml_attributes[$access_field] as $field_value) {
+		
+		if ($access_matching === "regex") {
+			if (preg_match($access_value, $field_value)) {
+				$match_found = true;
+				break;
+			}
+		} else {
+			if ($field_value === $access_value) {
+				$match_found = true;
+				break;
+			}
+		}
+	}
+	
+	// apply access rule
+	if ($access_type === "deny") {
+		return !$match_found;
+	} else {
+		return $match_found;
+	}
 }
