@@ -22,13 +22,19 @@ if ($source !== $_SESSION["saml_source"]) {
 	forward(REFERER);
 }
 
+$saml_attributes = $_SESSION["saml_attributes"];
+if (!simplesaml_validate_authentication_attributes($source, $saml_attributes)) {
+	// not authorized
+	register_error(elgg_echo("simplesaml:error:attribute_validation", array($label)));
+	forward(REFERER);
+}
+
 $displayname = get_input("displayname");
 $user_email = get_input("email");
 
 $forward_url = REFERER;
 
 $error = false;
-$saml_attributes = $_SESSION["saml_attributes"];
 
 // prepare for registration
 $name = "";

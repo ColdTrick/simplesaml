@@ -13,6 +13,20 @@ if (empty($source)) {
 	register_error(elgg_echo("simplesaml:error:no_source"));
 	forward(REFERER);
 }
+/**
+ * Login based on a SAML/CAS source
+ */
+
+if (elgg_is_logged_in()) {
+	register_error(elgg_echo("simplesaml:error:loggedin"));
+	forward(REFERER);
+}
+
+$source = get_input("saml_source");
+if (empty($source)) {
+	register_error(elgg_echo("simplesaml:error:no_source"));
+	forward(REFERER);
+}
 
 $label = simplesaml_get_source_label($source);
 if (!simplesaml_is_enabled_source($source)) {
@@ -41,6 +55,17 @@ if (!$saml_auth->isAuthenticated()) {
 } else {
 	// user is authenticated with IDP, so check in Elgg
 	$saml_attributes = simplesaml_get_authentication_attributes($saml_auth, $source);
+	
+	// check for additional authentication rules
+	if (!simplesaml_validate_authentication_attributes($source, $saml_attributes)) {
+		// not authorized
+		register_error(elgg_echo("simplesaml:error:attribute_validation", array($label)));
+		
+		// make sure we don't force login
+		$_SESSION["simpleaml_disable_sso"] = true;
+		
+		forward();
+	}
 	
 	// save the attributes for further use
 	$_SESSION["saml_attributes"] = $saml_attributes;

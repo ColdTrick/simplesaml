@@ -45,6 +45,7 @@ if (!empty($sources)) {
 	
 	foreach ($sources as $source) {
 		$source_auth_id = $source->getAuthId();
+		$source_auth_label = $source_auth_id;
 		$enabled = array();
 		$registration = array();
 		$auto_create_accounts = array();
@@ -82,6 +83,12 @@ if (!empty($sources)) {
 				
 				$enabled_sources[$source_type][] = $source_auth_id;
 			}
+			
+			$source_auth_label = elgg_view("output/url", array(
+				"text" => $source_auth_id . elgg_view_icon("settings-alt", "mls"),
+				"href" => "#" . $source_auth_id . "_wrapper",
+				"rel" => "toggle"
+			));
 		}
 		
 		if ($plugin->getSetting($source_auth_id . "_allow_registration")) {
@@ -106,7 +113,7 @@ if (!empty($sources)) {
 		
 		$content .= "<tr>";
 		$content .= "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source_auth_id . "_enabled]", "value" => "1") + $enabled) . "</td>";
-		$content .= "<td>" . $source_auth_id . "</td>";
+		$content .= "<td>" . $source_auth_label . "</td>";
 		$content .= "<td>" . $source_type_label . "</td>";
 		$content .= "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source_auth_id . "_allow_registration]", "value" => "1") + $registration) . "</td>";
 		$content .= "<td class='center'>" . elgg_view("input/checkbox", array("name" => "params[" . $source_auth_id . "_auto_create_accounts]", "value" => "1") + $auto_create_accounts) . "</td>";
@@ -146,6 +153,16 @@ if (!empty($sources)) {
 			}
 		}
 		
+		$access_types = array(
+			"allow" => elgg_echo("simplesaml:settings:sources:configuration:access_type:allow"),
+			"deny" => elgg_echo("simplesaml:settings:sources:configuration:access_type:deny"),
+		);
+		
+		$access_matching = array(
+			"exact" => elgg_echo("simplesaml:settings:sources:configuration:access_matching:exact"),
+			"regex" => elgg_echo("simplesaml:settings:sources:configuration:access_matching:regex"),
+		);
+		
 		// enabled sources are grouped by type
 		foreach ($enabled_sources as $source_type => $sources) {
 			// make sure we have sources of this type
@@ -176,7 +193,45 @@ if (!empty($sources)) {
 						$body .= "</div>";
 					}
 					
-					echo elgg_view_module("inline", $title, $body);
+					// advanced access options
+					$body .= "<h3 class='mtm'>" . elgg_echo("simplesaml:settings:sources:configuration:access") . "</h3>";
+					$body .= elgg_view("output/longtext", array("value" => elgg_echo("simplesaml:settings:sources:configuration:access:description")));
+					
+					$body .= "<div class='mbm'>";
+					$body .= elgg_view("input/dropdown", array(
+						"name" => "params[" . $source . "_access_type]",
+						"value" => $plugin->getSetting($source . "_access_type"),
+						"options_values" => $access_types
+					));
+					
+					$body .= elgg_view("input/dropdown", array(
+						"name" => "params[" . $source . "_access_matching]",
+						"value" => $plugin->getSetting($source . "_access_matching"),
+						"options_values" => $access_matching,
+						"class" => "mlm"
+					));
+					$body .= "</div>";
+					
+					$body .= "<div>";
+					$body .= elgg_echo("simplesaml:settings:sources:configuration:access_field");
+					$body .= elgg_view("input/text", array(
+						"name" => "params[" . $source . "_access_field]",
+						"value" => $plugin->getSetting($source . "_access_field")
+					));
+					$body .= "<div class='elgg-subtext'>" . elgg_echo("simplesaml:settings:sources:configuration:access_field:description") . "</div>";
+					$body .= "</div>";
+					
+					$body .= "<div>";
+					$body .= elgg_echo("simplesaml:settings:sources:configuration:access_value");
+					$body .= elgg_view("input/text", array(
+						"name" => "params[" . $source . "_access_value]",
+						"value" => $plugin->getSetting($source . "_access_value")
+					));
+					$body .= "<div class='elgg-subtext'>" . elgg_echo("simplesaml:settings:sources:configuration:access_value:description") . "</div>";
+					$body .= "</div>";
+					
+					
+					echo elgg_view_module("inline", $title, $body, array("id" => $source . "_wrapper", "class" => "hidden"));
 				}
 			}
 		}

@@ -1,6 +1,6 @@
 <?php
 
-$english = array(
+return array(
 	// general stuff
 	'simplesaml:error:loggedin' => "This action can't be performed when you're logged in",
 	'simplesaml:error:no_source' => "No authentication source defined",
@@ -8,6 +8,7 @@ $english = array(
 	'simplesaml:error:source_mismatch' => "The provided authentication source doesn't match the server connection",
 	'simplesaml:error:class' => "Error while getting the authentication source configuration: %s",
 	'simplesaml:error:not_configured' => "This plugin is not yet configured correctly, please contact your site administrator",
+	'simplesaml:error:attribute_validation' => "The site administrator configured additional authentication rules which prevent you from using %s as an authentication source",
 	
 	'simplesaml:source:type:unknown' => "Unknown",
 	'simplesaml:source:type:saml' => "SAML",
@@ -45,6 +46,17 @@ $english = array(
 	'simplesaml:settings:sources:configuration:auto_link' => "Automaticly link existing accounts based on profile information (optional)",
 	'simplesaml:settings:sources:configuration:auto_link:description' => "If the external authentication source provides the configured profile information, both accounts will be linked automaticly.",
 	'simplesaml:settings:sources:configuration:auto_link:none' => "Don't allow automatic linking",
+	
+	'simplesaml:settings:sources:configuration:access' => "Advanced access options",
+	'simplesaml:settings:sources:configuration:access:description' => "You can further limit the access of authorized SAML users by adding an extra filter below. You can explicitly allow user who match the settings or deny users who match the settings. The matching checks all values of the configured field (for example mulitple group values) if one of the values matches the user is allowed or denied. If eighter the field name or value is empty no additional validation will be applied.",
+	'simplesaml:settings:sources:configuration:access_type:allow' => "Allow access",
+	'simplesaml:settings:sources:configuration:access_type:deny' => "Deny access",
+	'simplesaml:settings:sources:configuration:access_matching:exact' => "Exact match",
+	'simplesaml:settings:sources:configuration:access_matching:regex' => "Regex match",
+	'simplesaml:settings:sources:configuration:access_field' => "SAML field name",
+	'simplesaml:settings:sources:configuration:access_field:description' => "To check which fields are available, login to the simplesamlphp website and use the test auth source link",
+	'simplesaml:settings:sources:configuration:access_value' => "SAML value",
+	'simplesaml:settings:sources:configuration:access_value:description' => "This can be an exact or regex value depending on the setting above. For help with the regex matching please check http://php.net/manual/en/function.preg-match.php",
 	
 	'simplesaml:settings:warning:configuration:sources' => "No authentication sources have been configured yet",
 	'simplesaml:settings:warning:configuration:simplesamlphp' => "Please provide the path to the SimpleSAMLPHP library for further configuration options",
@@ -94,5 +106,3 @@ $english = array(
 	'simplesaml:action:unlink:success' => "You've successfully removed the link with the authentication source %s",
 	
 );
-
-add_translation("en", $english);
