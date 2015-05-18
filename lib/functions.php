@@ -19,7 +19,7 @@ function simplesaml_get_source_label($source) {
 	if (!empty($source)) {
 		$lan_key = "simplesaml:sources:label:" . $source;
 		
-		if (elgg_echo($lan_key) != $lan_key) {
+		if (elgg_language_key_exists($lan_key)) {
 			$result = elgg_echo($lan_key);
 		}
 	}
@@ -697,7 +697,7 @@ function simplesaml_get_idp_label($idp_source) {
 	if (!empty($idp_source)) {
 		$lan_key = "simplesaml:idp:label:" . $idp_source;
 			
-		if (elgg_echo($lan_key) != $lan_key) {
+		if (elgg_language_key_exists($lan_key)) {
 			$result = elgg_echo($lan_key);
 		}
 	}

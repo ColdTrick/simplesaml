@@ -1,6 +1,10 @@
 Version History
 ===============
 
+3.0:
+
+- changes for Elgg 1.11
+
 x.x:
 
 - added: remember login for a SAML connection (admin setting) #12
