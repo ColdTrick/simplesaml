@@ -55,7 +55,7 @@ function simplesaml_init() {
 	elgg_register_widget_type("simplesaml", elgg_echo("login"), elgg_echo("simplesaml:widget:description"), array("index"), true);
 	
 	// register events
-	elgg_register_event_handler("login", "user", "simplesaml_login_event_handler");
+	elgg_register_event_handler("login:after", "user", "simplesaml_login_event_handler");
 	
 	// register plugin hooks
 	elgg_register_plugin_hook_handler("public_pages", "walled_garden", "simplesaml_walled_garden_hook");
