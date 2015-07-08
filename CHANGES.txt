@@ -1,13 +1,20 @@
 Version History
 ===============
 
-3.0:
+3.0 (2015-07-08):
 
 - changes for Elgg 1.11
+- added: composer support
+- fixed: deprecated notice of login event
+- fixed: SimpleSAML logout not triggered
 
-x.x:
+2.1 (2015-07-08):
 
+- added: additional access validation rules based on SAML attributes
+- added: composer support
 - added: remember login for a SAML connection (admin setting) #12
+- changed: listing of saml userdata
+- fixed: widget showing wrong information
 - fixed: deadloop with banned accounts #11
 - updated the installation instruction to no longer require modification to the core of SimpleSAMLPHP
 
