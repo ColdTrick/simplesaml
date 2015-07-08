@@ -2,6 +2,8 @@ SimpleSAML
 ==========
 
 [![Build Status](https://scrutinizer-ci.com/g/ColdTrick/simplesaml/badges/build.png?b=master)](https://scrutinizer-ci.com/g/ColdTrick/simplesaml/build-status/master)
+[![Latest Stable Version](https://poser.pugx.org/coldtrick/simplesaml/v/stable.svg)](https://packagist.org/packages/coldtrick/simplesaml)
+[![License](https://poser.pugx.org/coldtrick/simplesaml/license.svg)](https://packagist.org/packages/coldtrick/simplesaml)
 
 Connect your site to a SAML/CAS IDentity Provider (IDP) as a Service Provider (SP) or configure your Elgg installation as an IDP.
 
