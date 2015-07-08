@@ -1,9 +1,13 @@
 Version History
 ===============
 
-x.x:
+2.1 (2015-07-08):
 
+- added: additional access validation rules based on SAML attributes
+- added: composer support
 - added: remember login for a SAML connection (admin setting) #12
+- changed: listing of saml userdata
+- fixed: widget showing wrong information
 - fixed: deadloop with banned accounts #11
 - updated the installation instruction to no longer require modification to the core of SimpleSAMLPHP
 
