@@ -4,15 +4,15 @@
  */
 ?>
 //<script>
-elgg.provide("elgg.simplesaml_admin");
+elgg.provide('elgg.simplesaml_admin');
 
 elgg.simplesaml_admin.init = function() {
-	$("#simplesaml-settings-sources input[type='checkbox'][name$='_force_authentication]']").live("change", function() {
-		if ($(this).is(":checked")) {
+	$(document).on('change', '#simplesaml-settings-sources input[type="checkbox"][name$="_force_authentication]"]', function() {
+		if ($(this).is(':checked')) {
 			// uncheck all others
-			$("#simplesaml-settings-sources input[type='checkbox'][name$='force_authentication]']").not($(this)).removeAttr("checked");
+			$('#simplesaml-settings-sources input[type="checkbox"][name$="force_authentication]"]').not($(this)).removeAttr('checked');
 		}
 	});
 };
 
-elgg.register_hook_handler("init", "system", elgg.simplesaml_admin.init);
+elgg.register_hook_handler('init', 'system', elgg.simplesaml_admin.init);
