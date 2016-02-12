@@ -6,7 +6,8 @@ if (elgg_is_logged_in()) {
 }
 
 $source = get_input('saml_source');
-if (empty($source) || empty($_SESSION['saml_source'])) {
+$session_source = simplesaml_get_from_session('saml_source');
+if (empty($source) || empty($session_source)) {
 	register_error(elgg_echo('simplesaml:error:no_source'));
 	forward(REFERER);
 }
@@ -17,12 +18,12 @@ if (!simplesaml_is_enabled_source($source)) {
 	forward(REFERER);
 }
 
-if ($source !== $_SESSION['saml_source']) {
+if ($source !== $session_source) {
 	register_error(elgg_echo('simplesaml:error:source_mismatch'));
 	forward(REFERER);
 }
 
-$saml_attributes = $_SESSION['saml_attributes'];
+$saml_attributes = simplesaml_get_from_session('saml_attributes');
 if (!simplesaml_validate_authentication_attributes($source, $saml_attributes)) {
 	// not authorized
 	register_error(elgg_echo('simplesaml:error:attribute_validation', [$label]));
@@ -118,8 +119,8 @@ if (!empty($user)) {
 	system_message(elgg_echo('registerok', [elgg_get_site_entity()->name]));
 	
 	// cleanup session
-	unset($_SESSION['saml_source']);
-	unset($_SESSION['saml_attributes']);
+	simplesaml_remove_from_session('saml_source');
+	simplesaml_remove_from_session('saml_attributes');
 	
 	// try to login the user
 	try {
@@ -132,15 +133,12 @@ if (!empty($user)) {
 		// login the user
 		login($user);
 		
-		if (!empty($_SESSION['last_forward_from'])) {
-			$forward_url = $_SESSION['last_forward_from'];
-			unset($_SESSION['last_forward_from']);
-		} else {
-			$forward_url = '';
-		}
+		// get forward url
+		$forward_url = simplesaml_get_from_session('last_forward_from', '');
+		simplesaml_remove_from_session('last_forward_from');
 	} catch (Exception $e) {
 		// make sure we don't force login
-		$_SESSION['simpleaml_disable_sso'] = true;
+		simplesaml_store_in_session('simpleaml_disable_sso', true);
 		
 		$forward_url = '';
 	}

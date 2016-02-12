@@ -19,13 +19,13 @@ class Login {
 			return;
 		}
 		
+		$saml_attributes = simplesaml_get_from_session('saml_attributes');
+		$source = simplesaml_get_from_session('saml_source');
+		
 		// simplesaml login?
-		if (!isset($_SESSION['saml_attributes']) || !isset($_SESSION['saml_source'])) {
+		if (!isset($saml_attributes) || !isset($source)) {
 			return;
 		}
-		
-		$saml_attributes = $_SESSION['saml_attributes'];
-		$source = $_SESSION['saml_source'];
 		
 		// source enabled
 		if (!simplesaml_is_enabled_source($source)) {
@@ -52,10 +52,10 @@ class Login {
 		simplesaml_save_authentication_attributes($object, $source, $saml_attributes);
 		
 		// save source name for single logout
-		$_SESSION['saml_login_source'] = $source;
+		simplesaml_store_in_session('saml_login_source', $source);
 		
 		// cleanup
-		unset($_SESSION['saml_attributes']);
-		unset($_SESSION['saml_source']);
+		simplesaml_remove_from_session('saml_attributes');
+		simplesaml_remove_from_session('saml_source');
 	}
 }

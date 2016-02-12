@@ -17,12 +17,13 @@ class Logout {
 	public static function action($hook, $type, $return_value, $params) {
 		global $SIMPLESAML_SOURCE;
 		
-		if (!isset($_SESSION['saml_login_source'])) {
+		$login_source = simplesaml_get_from_session('saml_login_source');
+		if (!isset($login_source)) {
 			return;
 		}
 		
 		// store session data because session is destroyed
-		$SIMPLESAML_SOURCE = $_SESSION['saml_login_source'];
+		$SIMPLESAML_SOURCE = $login_source;
 	
 		// after session is destroyed forward to saml logout
 		elgg_register_plugin_hook_handler('forward', 'system', '\ColdTrick\SimpleSAML\Logout::forward');

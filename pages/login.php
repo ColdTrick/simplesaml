@@ -42,8 +42,9 @@ try {
 }
 
 // make sure we can forward you to the correct url
-if (!isset($_SESSION['last_forward_from'])) {
-	$_SESSION['last_forward_from'] = $_SERVER['REFERER'];
+$last_forward = simplesaml_get_from_session('last_forward_from');
+if (!isset($last_forward)) {
+	simplesaml_store_in_session('last_forward_from', $_SERVER['REFERER']);
 }
 
 $forward_url = REFERER;
@@ -62,14 +63,14 @@ if (!$saml_auth->isAuthenticated()) {
 		register_error(elgg_echo('simplesaml:error:attribute_validation', [$label]));
 		
 		// make sure we don't force login
-		$_SESSION['simpleaml_disable_sso'] = true;
+		simplesaml_store_in_session('simpleaml_disable_sso', true);
 		
 		forward();
 	}
 	
 	// save the attributes for further use
-	$_SESSION['saml_attributes'] = $saml_attributes;
-	$_SESSION['saml_source'] = $source;
+	simplesaml_store_in_session('saml_attributes', $saml_attributes);
+	simplesaml_store_in_session('saml_source', $source);
 	
 	// make sure we can find all users (even unvalidated)
 	$hidden = access_get_show_hidden_status();
@@ -88,12 +89,9 @@ if (!$saml_auth->isAuthenticated()) {
 			// login the user
 			login($user, $persistent);
 			
-			if (!empty($_SESSION['last_forward_from'])) {
-				$forward_url = $_SESSION['last_forward_from'];
-				unset($_SESSION['last_forward_from']);
-			} else {
-				$forward_url = '';
-			}
+			// forward to correct place
+			$forward_url = simplesaml_get_from_session('last_forward_from', '');
+			simplesaml_remove_from_session('last_forward_from');
 			
 			system_message(elgg_echo('loginok'));
 		} catch (Exception $e) {
@@ -101,15 +99,15 @@ if (!$saml_auth->isAuthenticated()) {
 			register_error($e->getMessage());
 			
 			// make sure we don't force login
-			$_SESSION['simpleaml_disable_sso'] = true;
+			simplesaml_store_in_session('simpleaml_disable_sso', true);
 			
 			// forward to front page
 			$forward_url = '';
 		}
 		
 		// unset session vars
-		unset($_SESSION['saml_attributes']);
-		unset($_SESSION['saml_source']);
+		simplesaml_remove_from_session('saml_attributes');
+		simplesaml_remove_from_session('saml_source');
 		
 	} else {
 		// check if we can automaticly create an account for this user

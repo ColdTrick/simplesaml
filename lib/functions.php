@@ -725,11 +725,12 @@ function simplesaml_check_force_authentication() {
 	
 	if (isset($_GET['disable_sso'])) {
 		// bypass for sso
-		$_SESSION['simpleaml_disable_sso'] = true;
+		simplesaml_store_in_session('simpleaml_disable_sso', true);
 		return;
 	}
 	
-	if (isset($_SESSION['simpleaml_disable_sso']) && $_SESSION['simpleaml_disable_sso'] === true) {
+	$disable_sso = simplesaml_get_from_session('simpleaml_disable_sso', false);
+	if ($disable_sso === true) {
 		// sso was bypassed on a previous page
 		return;
 	}
@@ -751,8 +752,9 @@ function simplesaml_check_force_authentication() {
 	}
 	
 	// make sure we can forward you to the correct url
-	if (!isset($_SESSION['last_forward_from'])) {
-		$_SESSION['last_forward_from'] = current_page_url();
+	$last_forward = simplesaml_get_from_session('last_forward_from');
+	if (!isset($last_forward)) {
+		simplesaml_store_in_session('last_forward_from', current_page_url());
 	}
 	forward("saml/login/{$setting}");
 }
@@ -859,4 +861,45 @@ function simplesaml_validate_authentication_attributes($saml_source, $saml_attri
 	} else {
 		return $match_found;
 	}
+}
+
+/**
+ * Helper function to store information in $_SESSION
+ *
+ * @param string $name  the name to store under
+ * @param mixed  $value the value to store
+ *
+ * @access private
+ *
+ * @return void
+ */
+function simplesaml_store_in_session($name, $value) {
+	_elgg_services()->session->set($name, $value);
+}
+
+/**
+ * Helper function to get information from $_SESSION
+ *
+ * @param string $name    the name to get
+ * @param mixed  $default default value to return if not set in $_SESSION
+ *
+ * @access private
+ *
+ * @return null|mixed
+ */
+function simplesaml_get_from_session($name, $default = null) {
+	return _elgg_services()->session->get($name, $default);
+}
+
+/**
+ * Helper function to remove information from $_SESSION
+ *
+ * @param string $name the name to remove
+ *
+ * @access private
+ *
+ * @return mixed
+ */
+function simplesaml_remove_from_session($name) {
+	return _elgg_services()->session->remove($name);
 }

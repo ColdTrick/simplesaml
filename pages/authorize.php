@@ -30,8 +30,9 @@ try {
 }
 
 // make sure we can forward you to the correct url
-if (!isset($_SESSION['last_forward_from'])) {
-	$_SESSION['last_forward_from'] = $_SERVER['REFERER'];
+$last_forward = simplesaml_get_from_session('last_forward_from');
+if (!isset($last_forward)) {
+	simplesaml_store_in_session('last_forward_from', $_SERVER['REFERER']);
 }
 
 // login with SAML
