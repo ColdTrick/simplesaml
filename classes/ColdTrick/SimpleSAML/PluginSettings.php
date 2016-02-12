@@ -31,9 +31,7 @@ class PluginSettings {
 		
 		$pattern = '/^(?:idp_)[\S]+(?:_attributes)$/';
 		if (preg_match($pattern, $setting_name)) {
-			$result = json_encode($result);
+			return json_encode($result);
 		}
-		
-		return $result;
 	}
 }

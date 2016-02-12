@@ -72,12 +72,12 @@ if (!empty($sources)) {
 		
 		if ($plugin->getSetting("{$source_auth_id}_enabled")) {
 			$enabled = true;
-		
-			if ($source_type) {
+			
+			if ($source_type !== false) {
 				if (!isset($enabled_sources[$source_type])) {
 					$enabled_sources[$source_type] = [];
 				}
-		
+				
 				$enabled_sources[$source_type][] = $source_auth_id;
 			}
 		}

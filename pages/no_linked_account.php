@@ -24,7 +24,7 @@ if (!simplesaml_is_enabled_source($source)) {
 }
 
 $session_source = simplesaml_get_from_session('saml_source');
-if ($session_source !== $source)) {
+if ($session_source !== $source) {
 	register_error(elgg_echo('simplesaml:error:source_mismatch'));
 	forward();
 }
