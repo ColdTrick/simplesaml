@@ -63,7 +63,7 @@ if (!$saml_auth->isAuthenticated()) {
 		register_error(elgg_echo('simplesaml:error:attribute_validation', [$label]));
 		
 		// make sure we don't force login
-		simplesaml_store_in_session('simpleaml_disable_sso', true);
+		simplesaml_store_in_session('simplesaml_disable_sso', true);
 		
 		forward();
 	}
@@ -99,7 +99,7 @@ if (!$saml_auth->isAuthenticated()) {
 			register_error($e->getMessage());
 			
 			// make sure we don't force login
-			simplesaml_store_in_session('simpleaml_disable_sso', true);
+			simplesaml_store_in_session('simplesaml_disable_sso', true);
 			
 			// forward to front page
 			$forward_url = '';

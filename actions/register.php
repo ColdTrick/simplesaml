@@ -138,7 +138,7 @@ if (!empty($user)) {
 		simplesaml_remove_from_session('last_forward_from');
 	} catch (Exception $e) {
 		// make sure we don't force login
-		simplesaml_store_in_session('simpleaml_disable_sso', true);
+		simplesaml_store_in_session('simplesaml_disable_sso', true);
 		
 		$forward_url = '';
 	}

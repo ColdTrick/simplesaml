@@ -725,11 +725,11 @@ function simplesaml_check_force_authentication() {
 	
 	if (isset($_GET['disable_sso'])) {
 		// bypass for sso
-		simplesaml_store_in_session('simpleaml_disable_sso', true);
+		simplesaml_store_in_session('simplesaml_disable_sso', true);
 		return;
 	}
 	
-	$disable_sso = simplesaml_get_from_session('simpleaml_disable_sso', false);
+	$disable_sso = simplesaml_get_from_session('simplesaml_disable_sso', false);
 	if ($disable_sso === true) {
 		// sso was bypassed on a previous page
 		return;
