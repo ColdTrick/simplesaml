@@ -59,7 +59,7 @@ if ($plugin->getSetting("{$source_auth_id}_remember_me")) {
 $content = '';
 $content .= '<tr>';
 $content .= elgg_format_element('td', ['class' => 'center'], elgg_view('input/checkbox', [
-	'name' => "params[{$source_auth_id_enabled}]",
+	'name' => "params[{$source_auth_id}_enabled]",
 	'value' => '1',
 	'checked' => $enabled,
 ]));
