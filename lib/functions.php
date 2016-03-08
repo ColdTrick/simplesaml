@@ -874,7 +874,9 @@ function simplesaml_validate_authentication_attributes($saml_source, $saml_attri
  * @return void
  */
 function simplesaml_store_in_session($name, $value) {
-	_elgg_services()->session->set($name, $value);
+	$session = elgg_get_session();
+	
+	$session->set($name, $value);
 }
 
 /**
@@ -888,7 +890,9 @@ function simplesaml_store_in_session($name, $value) {
  * @return null|mixed
  */
 function simplesaml_get_from_session($name, $default = null) {
-	return _elgg_services()->session->get($name, $default);
+	$session = elgg_get_session();
+	
+	return $session->get($name, $default);
 }
 
 /**
@@ -901,5 +905,7 @@ function simplesaml_get_from_session($name, $default = null) {
  * @return mixed
  */
 function simplesaml_remove_from_session($name) {
-	return _elgg_services()->session->remove($name);
+	$session = elgg_get_session();
+	
+	return $session->remove($name);
 }
