@@ -10,7 +10,7 @@ elgg.simplesaml_admin.init = function() {
 	$(document).on('change', '#simplesaml-settings-sources input[type="checkbox"][name$="_force_authentication]"]', function() {
 		if ($(this).is(':checked')) {
 			// uncheck all others
-			$('#simplesaml-settings-sources input[type="checkbox"][name$="force_authentication]"]').not($(this)).removeAttr('checked');
+			$('#simplesaml-settings-sources input[type="checkbox"][name$="force_authentication]"]').not($(this)).prop('checked', false);
 		}
 	});
 };
