@@ -1,5 +1,7 @@
 <?php
 
+elgg_require_js('simplesaml/settings');
+
 $plugin = elgg_extract('entity', $vars);
 
 // path to simplesaml

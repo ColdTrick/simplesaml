@@ -42,9 +42,6 @@ function simplesaml_init() {
 	elgg_extend_view('page/default', 'simplesaml/force_authentication', 200);
 	elgg_extend_view('page/walled_garden', 'simplesaml/force_authentication', 200);
 	
-	// extend CSS/JS
-	elgg_extend_view('js/admin', 'js/simplesaml/admin');
-	
 	// allow login
 	elgg_extend_view('forms/login', 'simplesaml/login');
 	
