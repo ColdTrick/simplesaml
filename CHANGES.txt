@@ -1,6 +1,10 @@
 Version history
 ===============
 
+3.0.3 (2016-07-07):
+
+- fixed: deprecated notice for use of admin JS
+
 3.0.2 (2016-04-14):
 
 - fixed: use correct function to get ElggSession
