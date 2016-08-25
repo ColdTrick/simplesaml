@@ -144,6 +144,7 @@ if (!empty($sources)) {
 				echo elgg_view('simplesaml/settings/service_provider_advanced', [
 					'plugin' => $plugin,
 					'source_id' => $source_id,
+					'source_id_type' => $source_type,
 					'auto_link_options' => $auto_link_options,
 					'access_type_options' => $access_type_options,
 					'access_matching_options' => $access_matching_options,

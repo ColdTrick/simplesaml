@@ -5,6 +5,7 @@
 
 $plugin = elgg_extract('plugin', $vars);
 $source_id = elgg_extract('source_id', $vars);
+$source_id_type = elgg_extract('source_id_type', $vars);
 
 if (!($plugin instanceof ElggPlugin) || empty($source_id)) {
 	return;
