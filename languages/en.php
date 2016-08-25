@@ -46,7 +46,9 @@ return array(
 	'simplesaml:settings:sources:configuration:auto_link' => "Automaticly link existing accounts based on profile information (optional)",
 	'simplesaml:settings:sources:configuration:auto_link:description' => "If the external authentication source provides the configured profile information, both accounts will be linked automaticly.",
 	'simplesaml:settings:sources:configuration:auto_link:none' => "Don't allow automatic linking",
-	
+	'simplesaml:settings:sources:configuration:force_authentication_cidrs' => "Only enable Force authentication for the following defined CIDR (optional)",
+	'simplesaml:settings:sources:configuration:force_authentication_cidrs:description' => "Comma seperated list of CIDRs to enable Force authentication for, useful for authenticating using SSO on an intranet. Keep empty for always.",
+
 	'simplesaml:settings:sources:configuration:access' => "Advanced access options",
 	'simplesaml:settings:sources:configuration:access:description' => "You can further limit the access of authorized SAML users by adding an extra filter below. You can explicitly allow user who match the settings or deny users who match the settings. The matching checks all values of the configured field (for example mulitple group values) if one of the values matches the user is allowed or denied. If eighter the field name or value is empty no additional validation will be applied.",
 	'simplesaml:settings:sources:configuration:access_type:allow' => "Allow access",

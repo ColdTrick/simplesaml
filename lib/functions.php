@@ -722,6 +722,22 @@ function simplesaml_check_force_authentication() {
 		// no need to do anything if already logged in
 		return;
 	}
+
+	$cidrs = elgg_get_plugin_setting('force_authentication_cidrs', 'simplesaml');
+	if (!empty($cidrs)) {
+		$cidrs = explode(',', $cidrs);
+        	$found = false;
+
+        	foreach ($cidrs as $cidr) {
+            		if (simplesaml_cidr_match($_SERVER['REMOTE_ADDR'], trim($cidr))) {
+                		$found = true;
+            		}
+        	}
+
+        	if (!$found) {
+			return;
+		}
+	}
 	
 	if (isset($_GET['disable_sso'])) {
 		// bypass for sso
@@ -908,4 +924,22 @@ function simplesaml_remove_from_session($name) {
 	$session = elgg_get_session();
 	
 	return $session->remove($name);
+}
+
+/**
+ * Helper function to check if IP is in CIDR
+ *
+ * @param string $ip    IP address to match with CIRT
+ * @param string $cidr  CIDR to match the IP against
+ *
+ * @return bool
+ */
+function simplesaml_cidr_match($ip, $cidr) {
+	list($subnet, $mask) = explode('/', $cidr);
+
+	if ((ip2long($ip) & ~((1 << (32 - $mask)) - 1) ) == ip2long($subnet)) {
+		return true;
+    	}
+
+    	return false;
 }
