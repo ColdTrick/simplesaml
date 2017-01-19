@@ -722,22 +722,6 @@ function simplesaml_check_force_authentication() {
 		// no need to do anything if already logged in
 		return;
 	}
-
-	$cidrs = elgg_get_plugin_setting('force_authentication_cidrs', 'simplesaml');
-	if (!empty($cidrs)) {
-		$cidrs = explode(',', $cidrs);
-        	$found = false;
-
-        	foreach ($cidrs as $cidr) {
-            		if (simplesaml_cidr_match($_SERVER['REMOTE_ADDR'], trim($cidr))) {
-                		$found = true;
-            		}
-        	}
-
-        	if (!$found) {
-			return;
-		}
-	}
 	
 	if (isset($_GET['disable_sso'])) {
 		// bypass for sso
@@ -755,13 +739,31 @@ function simplesaml_check_force_authentication() {
 		// do not force authentication on the no_linked_account page
 		return;
 	}
-	
+
 	// get the plugin setting that defines force authentications
 	$setting = elgg_get_plugin_setting('force_authentication', 'simplesaml');
 	if (empty($setting)) {
 		return;
 	}
-	
+
+	// check if force for specific CIDR's is enabled
+	$cidrs = elgg_get_plugin_setting($setting . '_force_authentication_cidrs', 'simplesaml');
+	if (!empty($cidrs)) {
+		// check if IP matches a listed CIDR
+		$cidrs = explode(',', $cidrs);
+		$found = false;
+
+		foreach ($cidrs as $cidr) {
+			if (simplesaml_cidr_match($_SERVER['REMOTE_ADDR'], trim($cidr))) {
+				$found = true;
+			}
+		}
+
+		if (!$found) {
+			return;
+		}
+	}
+
 	// check if the authentication source is enabled
 	if (!simplesaml_is_enabled_source($setting)) {
 		return;

@@ -56,8 +56,8 @@ if ($force_authentication == $source_id) {
 
 	$force_authentication_cidrs = elgg_echo('simplesaml:settings:sources:configuration:force_authentication_cidrs');
 	$force_authentication_cidrs .= elgg_view('input/text', [
-		'name' => "params[force_authentication_cidrs]",
-		'value' => $plugin->getSetting("force_authentication_cidrs"),
+		'name' => "params[{$source_id}_force_authentication_cidrs]",
+		'value' => $plugin->getSetting("{$source_id}_force_authentication_cidrs"),
 	]);
 	$force_authentication_cidrs .= elgg_format_element('div', ['class' => 'elgg-subtext'], elgg_echo('simplesaml:settings:sources:configuration:force_authentication_cidrs:description'));
 	$body .= elgg_format_element('div', [], $force_authentication_cidrs);
