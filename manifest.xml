@@ -8,7 +8,7 @@
 	<website>http://www.coldtrick.com/</website>
 	<repository>https://github.com/ColdTrick/simplesaml</repository>
 	<bugtracker>https://github.com/ColdTrick/simplesaml/issues</bugtracker>
-	<copyright>(C) ColdTrick IT Solutions 2012 - 2015</copyright>
+	<copyright>(C) ColdTrick IT Solutions 2012 - 2018</copyright>
 	<license>GNU General Public License version 2</license>
  	
  	<requires>
