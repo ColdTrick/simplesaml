@@ -1,6 +1,11 @@
 Version history
 ===============
 
+3.1 (2018-02-15):
+
+- added: force authentication for specific CIRDs (#17)
+- fixed: issue where custom user id isn't visible for SAML
+
 3.0.3 (2016-07-07):
 
 - fixed: deprecated notice for use of admin JS
