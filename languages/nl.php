@@ -36,6 +36,8 @@ return array (
   'simplesaml:settings:sources:configuration:auto_link' => 'Link accounts automatisch op basis van profiel informatie (optioneel)',
   'simplesaml:settings:sources:configuration:auto_link:description' => 'Als de externe authenticatie bron de geconfigureerde profiel informatie aanlevert, zullen beide accounts automatisch gelinkt worden.',
   'simplesaml:settings:sources:configuration:auto_link:none' => 'Automatisch linken niet toestaan',
+  'simplesaml:settings:sources:configuration:force_authentication_cidrs' => "Schakel Forceer authenticatie alleen in voor de volgende CIDRs (optional)",
+  'simplesaml:settings:sources:configuration:force_authentication_cidrs:description' => "Komma gescheiden lijst van CIDRs om Forceer authenticatie voor aan te zetten, handig voor SSO binnen een intranet. Houd leeg voor altijd.",
   'simplesaml:settings:warning:configuration:sources' => 'Er zijn nog geen authenticatie bronnen geconfigureerd',
   'simplesaml:settings:idp' => 'IDentity Provider configuratie voor: %s',
   'simplesaml:settings:idp:description' => 'Hier kan worden geconfigureerd welke profiel informatie wordt vrijgegeven in het SAML authenticatie proces.',

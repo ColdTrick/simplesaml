@@ -51,6 +51,19 @@ if ($source_id_type == 'saml') {
 	$body .= elgg_format_element('div', [], $external_id);
 }
 
+$force_authentication = $plugin->getSetting('force_authentication');
+if ($force_authentication == $source_id) {
+	// Only show when the current sourec has the force authentication enabled
+
+	$force_authentication_cidrs = elgg_echo('simplesaml:settings:sources:configuration:force_authentication_cidrs');
+	$force_authentication_cidrs .= elgg_view('input/text', [
+		'name' => "params[{$source_id}_force_authentication_cidrs]",
+		'value' => $plugin->getSetting("{$source_id}_force_authentication_cidrs"),
+	]);
+	$force_authentication_cidrs .= elgg_format_element('div', ['class' => 'elgg-subtext'], elgg_echo('simplesaml:settings:sources:configuration:force_authentication_cidrs:description'));
+	$body .= elgg_format_element('div', [], $force_authentication_cidrs);
+}
+
 // advanced access options
 $body .= elgg_format_element('h4', ['class' => 'mtm'], elgg_echo('simplesaml:settings:sources:configuration:access'));
 $body .= elgg_view('output/longtext', [

@@ -739,13 +739,31 @@ function simplesaml_check_force_authentication() {
 		// do not force authentication on the no_linked_account page
 		return;
 	}
-	
+
 	// get the plugin setting that defines force authentications
 	$setting = elgg_get_plugin_setting('force_authentication', 'simplesaml');
 	if (empty($setting)) {
 		return;
 	}
-	
+
+	// check if force for specific CIDR's is enabled
+	$cidrs = elgg_get_plugin_setting($setting . '_force_authentication_cidrs', 'simplesaml');
+	if (!empty($cidrs)) {
+		// check if IP matches a listed CIDR
+		$cidrs = explode(',', $cidrs);
+		$found = false;
+
+		foreach ($cidrs as $cidr) {
+			if (simplesaml_cidr_match($_SERVER['REMOTE_ADDR'], trim($cidr))) {
+				$found = true;
+			}
+		}
+
+		if (!$found) {
+			return;
+		}
+	}
+
 	// check if the authentication source is enabled
 	if (!simplesaml_is_enabled_source($setting)) {
 		return;
@@ -908,4 +926,22 @@ function simplesaml_remove_from_session($name) {
 	$session = elgg_get_session();
 	
 	return $session->remove($name);
+}
+
+/**
+ * Helper function to check if IP is in CIDR
+ *
+ * @param string $ip    IP address to match with CIRT
+ * @param string $cidr  CIDR to match the IP against
+ *
+ * @return bool
+ */
+function simplesaml_cidr_match($ip, $cidr) {
+	list($subnet, $mask) = explode('/', $cidr);
+
+	if ((ip2long($ip) & ~((1 << (32 - $mask)) - 1) ) == ip2long($subnet)) {
+		return true;
+    	}
+
+    	return false;
 }
