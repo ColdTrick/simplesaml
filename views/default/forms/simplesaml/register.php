@@ -3,7 +3,7 @@
 $source = elgg_extract('saml_source', $vars);
 $label = simplesaml_get_source_label($source);
 
-$saml_attributes = simplesaml_get_from_session('saml_attributes');
+$saml_attributes = elgg_get_session()->get('saml_attributes');
 
 echo elgg_format_element('div', ['class' => 'mbm'], elgg_echo('simplesaml:forms:register:description', [$label]));
 

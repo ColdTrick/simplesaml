@@ -725,11 +725,11 @@ function simplesaml_check_force_authentication() {
 	
 	if (isset($_GET['disable_sso'])) {
 		// bypass for sso
-		simplesaml_store_in_session('simplesaml_disable_sso', true);
+		elgg_get_session()->set('simplesaml_disable_sso', true);
 		return;
 	}
 	
-	$disable_sso = simplesaml_get_from_session('simplesaml_disable_sso', false);
+	$disable_sso = elgg_get_session()->get('simplesaml_disable_sso', false);
 	if ($disable_sso === true) {
 		// sso was bypassed on a previous page
 		return;
@@ -770,9 +770,9 @@ function simplesaml_check_force_authentication() {
 	}
 	
 	// make sure we can forward you to the correct url
-	$last_forward = simplesaml_get_from_session('last_forward_from');
+	$last_forward = elgg_get_session()->get('last_forward_from');
 	if (!isset($last_forward)) {
-		simplesaml_store_in_session('last_forward_from', current_page_url());
+		elgg_get_session()->set('last_forward_from', current_page_url());
 	}
 	forward("saml/login/{$setting}");
 }
@@ -879,53 +879,6 @@ function simplesaml_validate_authentication_attributes($saml_source, $saml_attri
 	} else {
 		return $match_found;
 	}
-}
-
-/**
- * Helper function to store information in $_SESSION
- *
- * @param string $name  the name to store under
- * @param mixed  $value the value to store
- *
- * @access private
- *
- * @return void
- */
-function simplesaml_store_in_session($name, $value) {
-	$session = elgg_get_session();
-	
-	$session->set($name, $value);
-}
-
-/**
- * Helper function to get information from $_SESSION
- *
- * @param string $name    the name to get
- * @param mixed  $default default value to return if not set in $_SESSION
- *
- * @access private
- *
- * @return null|mixed
- */
-function simplesaml_get_from_session($name, $default = null) {
-	$session = elgg_get_session();
-	
-	return $session->get($name, $default);
-}
-
-/**
- * Helper function to remove information from $_SESSION
- *
- * @param string $name the name to remove
- *
- * @access private
- *
- * @return mixed
- */
-function simplesaml_remove_from_session($name) {
-	$session = elgg_get_session();
-	
-	return $session->remove($name);
 }
 
 /**

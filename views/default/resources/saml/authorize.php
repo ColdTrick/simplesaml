@@ -30,9 +30,9 @@ try {
 }
 
 // make sure we can forward you to the correct url
-$last_forward = simplesaml_get_from_session('last_forward_from');
+$last_forward = elgg_get_session()->get('last_forward_from');
 if (!isset($last_forward)) {
-	simplesaml_store_in_session('last_forward_from', $_SERVER['REFERER']);
+	elgg_get_session()->set('last_forward_from', $_SERVER['REFERER']);
 }
 
 // login with SAML

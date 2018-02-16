@@ -11,7 +11,7 @@ if (!empty($returnTo)) {
 	if (elgg_is_logged_in()) {
 		forward($returnTo);
 	} else {
-		simplesaml_store_in_session('last_forward_from', $returnTo);
+		elgg_get_session()->set('last_forward_from', $returnTo);
 	}
 }
 

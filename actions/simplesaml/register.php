@@ -6,7 +6,7 @@ if (elgg_is_logged_in()) {
 }
 
 $source = get_input('saml_source');
-$session_source = simplesaml_get_from_session('saml_source');
+$session_source = elgg_get_session()->get('saml_source');
 if (empty($source) || empty($session_source)) {
 	register_error(elgg_echo('simplesaml:error:no_source'));
 	forward(REFERER);
@@ -23,7 +23,7 @@ if ($source !== $session_source) {
 	forward(REFERER);
 }
 
-$saml_attributes = simplesaml_get_from_session('saml_attributes');
+$saml_attributes = elgg_get_session()->get('saml_attributes');
 if (!simplesaml_validate_authentication_attributes($source, $saml_attributes)) {
 	// not authorized
 	register_error(elgg_echo('simplesaml:error:attribute_validation', [$label]));
@@ -119,8 +119,8 @@ if (!empty($user)) {
 	system_message(elgg_echo('registerok', [elgg_get_site_entity()->name]));
 	
 	// cleanup session
-	simplesaml_remove_from_session('saml_source');
-	simplesaml_remove_from_session('saml_attributes');
+	elgg_get_session()->remove('saml_source');
+	elgg_get_session()->remove('saml_attributes');
 	
 	// try to login the user
 	try {
@@ -134,11 +134,10 @@ if (!empty($user)) {
 		login($user);
 		
 		// get forward url
-		$forward_url = simplesaml_get_from_session('last_forward_from', '');
-		simplesaml_remove_from_session('last_forward_from');
+		$forward_url = elgg_get_session()->remove('last_forward_from');
 	} catch (Exception $e) {
 		// make sure we don't force login
-		simplesaml_store_in_session('simplesaml_disable_sso', true);
+		elgg_get_session()->set('simplesaml_disable_sso', true);
 		
 		$forward_url = '';
 	}

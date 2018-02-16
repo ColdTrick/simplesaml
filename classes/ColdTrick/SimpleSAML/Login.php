@@ -19,8 +19,8 @@ class Login {
 			return;
 		}
 		
-		$saml_attributes = simplesaml_get_from_session('saml_attributes');
-		$source = simplesaml_get_from_session('saml_source');
+		$saml_attributes = elgg_get_session()->get('saml_attributes');
+		$source = elgg_get_session()->get('saml_source');
 		
 		// simplesaml login?
 		if (!isset($saml_attributes) || !isset($source)) {
@@ -52,10 +52,10 @@ class Login {
 		simplesaml_save_authentication_attributes($object, $source, $saml_attributes);
 		
 		// save source name for single logout
-		simplesaml_store_in_session('saml_login_source', $source);
+		elgg_get_session()->set('saml_login_source', $source);
 		
 		// cleanup
-		simplesaml_remove_from_session('saml_attributes');
-		simplesaml_remove_from_session('saml_source');
+		elgg_get_session()->remove('saml_attributes');
+		elgg_get_session()->remove('saml_source');
 	}
 }

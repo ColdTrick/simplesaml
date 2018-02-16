@@ -24,9 +24,9 @@ try {
 }
 
 // make sure we can forward you to the correct url
-$last_forward = simplesaml_get_from_session('last_forward_from');
+$last_forward = elgg_get_session()->get('last_forward_from');
 if (!isset($last_forward)) {
-	simplesaml_store_in_session('last_forward_from', $_SERVER['REFERER']);
+	elgg_get_session()->set('last_forward_from', $_SERVER['REFERER']);
 }
 
 $forward_url = REFERER;
@@ -45,14 +45,14 @@ if (!$saml_auth->isAuthenticated()) {
 		register_error(elgg_echo('simplesaml:error:attribute_validation', [$label]));
 		
 		// make sure we don't force login
-		simplesaml_store_in_session('simplesaml_disable_sso', true);
+		elgg_get_session()->set('simplesaml_disable_sso', true);
 		
 		forward();
 	}
 	
 	// save the attributes for further use
-	simplesaml_store_in_session('saml_attributes', $saml_attributes);
-	simplesaml_store_in_session('saml_source', $source);
+	elgg_get_session()->set('saml_attributes', $saml_attributes);
+	elgg_get_session()->set('saml_source', $source);
 	
 	// make sure we can find all users (even unvalidated)
 	$hidden = access_get_show_hidden_status();
@@ -72,8 +72,7 @@ if (!$saml_auth->isAuthenticated()) {
 			login($user, $persistent);
 			
 			// forward to correct place
-			$forward_url = simplesaml_get_from_session('last_forward_from', '');
-			simplesaml_remove_from_session('last_forward_from');
+			$forward_url = elgg_get_session()->remove('last_forward_from');
 			
 			system_message(elgg_echo('loginok'));
 		} catch (Exception $e) {
@@ -81,15 +80,15 @@ if (!$saml_auth->isAuthenticated()) {
 			register_error($e->getMessage());
 			
 			// make sure we don't force login
-			simplesaml_store_in_session('simplesaml_disable_sso', true);
+			elgg_get_session()->set('simplesaml_disable_sso', true);
 			
 			// forward to front page
 			$forward_url = '';
 		}
 		
 		// unset session vars
-		simplesaml_remove_from_session('saml_attributes');
-		simplesaml_remove_from_session('saml_source');
+		elgg_get_session()->remove('saml_attributes');
+		elgg_get_session()->remove('saml_source');
 		
 	} else {
 		// check if we can automaticly create an account for this user

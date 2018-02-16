@@ -17,7 +17,7 @@ class Logout {
 	public static function action($hook, $type, $return_value, $params) {
 		global $SIMPLESAML_SOURCE;
 		
-		$login_source = simplesaml_get_from_session('saml_login_source');
+		$login_source = elgg_get_session()->get('saml_login_source');
 		if (!isset($login_source)) {
 			return;
 		}
