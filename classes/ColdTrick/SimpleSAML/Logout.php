@@ -2,19 +2,18 @@
 
 namespace ColdTrick\SimpleSAML;
 
+use Elgg\Http\OkResponse;
+
 class Logout {
 	
 	/**
 	 * Hook on the logout action to make sure we can logout on SimpleSAML
 	 *
-	 * @param string $hook         the name of the hook
-	 * @param string $type         the type of the hook
-	 * @param bool   $return_value current return value
-	 * @param array  $params       supplied params
+	 * @param \Elgg\Hook $hook 'action', 'logout'
 	 *
 	 * @return void
 	 */
-	public static function action($hook, $type, $return_value, $params) {
+	public static function action(\Elgg\Hook $hook) {
 		global $SIMPLESAML_SOURCE;
 		
 		$login_source = elgg_get_session()->get('saml_login_source');
@@ -26,33 +25,31 @@ class Logout {
 		$SIMPLESAML_SOURCE = $login_source;
 	
 		// after session is destroyed forward to saml logout
-		elgg_register_plugin_hook_handler('forward', 'system', '\ColdTrick\SimpleSAML\Logout::forward');
+		elgg_register_plugin_hook_handler('response', 'action:logout', '\ColdTrick\SimpleSAML\Logout::response', 99999);
 	}
 	
 	/**
 	 * Hook on the forward function to make sure we can logout on SimpleSAML
 	 *
-	 * @param string $hook         the name of the hook
-	 * @param string $type         the tpe of the hook
-	 * @param bool   $return_value the current url to forward to
-	 * @param array  $params       supplied params
+	 * @param \Elgg\Hook $hook 'response', 'action:logout'
 	 *
 	 * @return void
 	 */
-	public static function forward($hook, $type, $return_value, $params) {
+	public static function forward(\Elgg\Hook $hook) {
 		global $SIMPLESAML_SOURCE;
 		
-		if (elgg_is_logged_in() || empty($SIMPLESAML_SOURCE)) {
+		$responce = $hook->getValue();
+		if (!$responce instanceof OkResponse || empty($SIMPLESAML_SOURCE)) {
 			return;
 		}
 		
 		// do we have a logout source
 		try {
-			$source = new \SimpleSAML_Auth_Simple($SIMPLESAML_SOURCE);
+			$source = new \SimpleSAML\Auth\Simple($SIMPLESAML_SOURCE);
 	
 			// logout of the external source
-			$source->logout(elgg_get_site_url());
-		} catch (Exception $e) {
+			$source->logout($responce->getForwardURL());
+		} catch (\Exception $e) {
 			// do nothing
 		}
 	}
