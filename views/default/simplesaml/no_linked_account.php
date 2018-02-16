@@ -18,9 +18,10 @@ $login_options = '';
 
 // allow registration
 if ($allow_registration) {
-	$body_vars = [
-		'saml_source' => $source,
-	];
+	$body_vars = elgg_get_sticky_values('simplesaml/register');
+	$body_vars['saml_source'] = $source;
+	
+	elgg_clear_sticky_form('simplesaml/register');
 	
 	// show register box
 	$registration_form = elgg_view_form('simplesaml/register', [], $body_vars);

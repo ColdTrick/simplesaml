@@ -7,15 +7,14 @@ class Login {
 	/**
 	 * Take some actions during the login event of a user
 	 *
-	 * @param string   $event  the name of the event
-	 * @param string   $type   type of the event
-	 * @param ElggUser $object the current user trying to login
+	 * @param \Elgg\Event $event 'login:after', 'user'
 	 *
 	 * @return void
 	 */
-	public static function loginEvent($event, $type, $object) {
+	public static function loginEvent(\Elgg\Event $event) {
 		
-		if (!($object instanceof \ElggUser)) {
+		$user = $event->getObject();
+		if (!($user instanceof \ElggUser)) {
 			return;
 		}
 		
@@ -45,11 +44,11 @@ class Login {
 			}
 			
 			// save the external id so the next login will go faster
-			simplesaml_link_user($object, $source, $saml_uid);
+			simplesaml_link_user($user, $source, $saml_uid);
 		}
 		
 		// save the attributes to the user
-		simplesaml_save_authentication_attributes($object, $source, $saml_attributes);
+		simplesaml_save_authentication_attributes($user, $source, $saml_attributes);
 		
 		// save source name for single logout
 		elgg_get_session()->set('saml_login_source', $source);

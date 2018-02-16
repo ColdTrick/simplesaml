@@ -4,27 +4,22 @@ $source = get_input('source');
 $user_guid = (int) get_input('user_guid');
 
 if (empty($source) || empty($user_guid)) {
-	register_error(elgg_echo('error:missing_data'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('error:missing_data'));
 }
 
 $user = get_user($user_guid);
 if (empty($user) || !$user->canEdit()) {
-	register_error(elgg_echo('actionunauthorized'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('actionunauthorized'));
 }
 
 $label = simplesaml_get_source_label($source);
 
 if (!simplesaml_is_enabled_source($source)) {
-	register_error(elgg_echo('simplesaml:error:source_not_enabled', [$label]));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('simplesaml:error:source_not_enabled', [$label]));
 }
 
-if (simplesaml_unlink_user($user, $source)) {
-	system_message(elgg_echo('simplesaml:action:unlink:success', [$label]));
-} else {
-	register_error(elgg_echo('simplesaml:action:unlink:error', [$label]));
+if (!simplesaml_unlink_user($user, $source)) {
+	return elgg_error_response(elgg_echo('simplesaml:action:unlink:error', [$label]));
 }
 
-forward(REFERER);
+return elgg_ok_response('', elgg_echo('simplesaml:action:unlink:success', [$label]));

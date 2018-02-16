@@ -40,22 +40,24 @@ function simplesaml_get_configured_sources() {
 	}
 	
 	$result = false;
-	if (class_exists('SimpleSAML_Auth_Source')) {
-		// get SAML sources
-		$sources = SimpleSAML_Auth_Source::getSourcesOfType('saml:SP');
-		if (!empty($sources)) {
+	if (!class_exists('SimpleSAML_Auth_Source')) {
+		return $result;
+	}
+	
+	// get SAML sources
+	$sources = SimpleSAML_Auth_Source::getSourcesOfType('saml:SP');
+	if (!empty($sources)) {
+		$result = $sources;
+	}
+	
+	// get CAS sources
+	$sources = SimpleSAML_Auth_Source::getSourcesOfType('cas:CAS');
+	if (!empty($sources)) {
+		// check if we need to merge
+		if (!empty($result)) {
+			$result = array_merge($result, $sources);
+		} else {
 			$result = $sources;
-		}
-		
-		// get CAS sources
-		$sources = SimpleSAML_Auth_Source::getSourcesOfType('cas:CAS');
-		if (!empty($sources)) {
-			// check if we need to merge
-			if (!empty($result)) {
-				$result = array_merge($result, $sources);
-			} else {
-				$result = $sources;
-			}
 		}
 	}
 	
@@ -173,7 +175,6 @@ function simplesaml_find_user($source, $saml_attributes) {
 	$options = [
 		'type' => 'user',
 		'limit' => 1,
-		'site_guids' => false,
 		'plugin_id' => 'simplesaml',
 		'plugin_user_setting_name_value_pairs' => [
 			"{$source}_uid" => $saml_uid,
@@ -218,29 +219,23 @@ function simplesaml_find_user($source, $saml_attributes) {
 			break;
 		default:
 			// find user based on profile information
-			$ia = elgg_set_ignore_access(true);
-			
-			$options = [
-				'type' => 'user',
-				'limit' => false,
-				'site_guids' => false,
-				'metadata_name_value_pairs' => [
-					'name' => $profile_field,
-					'value' => $auto_link_value,
-				],
-			];
-			
-			$users = elgg_get_entities_from_metadata($options);
+			$users = elgg_call(ELGG_IGNORE_ACCESS, function () use ($profile_field, $auto_link_value){
+				return elgg_get_entities([
+					'type' => 'user',
+					'limit' => false,
+					'metadata_name_value_pairs' => [
+						'name' => $profile_field,
+						'value' => $auto_link_value,
+					],
+				]);
+			});
 			if (!empty($users) && (count($users) == 1)) {
 				// only found 1 user so this is ok
 				$result = $users[0];
 			}
-			
-			// restore access
-			elgg_set_ignore_access($ia);
 	}
 	
-	if (!($result instanceof ElggUser)) {
+	if (!$result instanceof ElggUser) {
 		return false;
 	}
 	
@@ -273,27 +268,21 @@ function simplesaml_allow_registration($source) {
 /**
  * A helper function to undo the extensions on the login form view.
  *
- * @see elgg_extend()
+ * @see elgg_extend_view()
  *
  * @return void
  */
 function simplesaml_unextend_login_form() {
-	global $CONFIG;
 	
-	if (!isset($CONFIG->views)) {
-		return;
-	}
-	
-	if (!isset($CONFIG->views->extensions)) {
-		return;
-	}
+	foreach (['forms/login', 'login/extend'] as $view) {
+		$extensions = elgg_get_view_extensions($view);
+		if (empty($extensions)) {
+			continue;
+		}
 		
-	if (isset($CONFIG->views->extensions['forms/login'])) {
-		unset($CONFIG->views->extensions['forms/login']);
-	}
-	
-	if (isset($CONFIG->views->extensions['login/extend'])) {
-		unset($CONFIG->views->extensions['login/extend']);
+		foreach ($extensions as $extension) {
+			elgg_unextend_view($view, $extension);
+		}
 	}
 }
 
@@ -306,28 +295,30 @@ function simplesaml_unextend_login_form() {
  * - email address
  * - etc.
  *
- * @param SimpleSAML_Auth_Simple $saml_auth the Authentication object from the SimpleSAMLPHP library
- * @param string                 $source    the name of the Service Provider
+ * @param \SimpleSAML\Auth\Simple $saml_auth the Authentication object from the SimpleSAMLPHP library
+ * @param string                  $source    the name of the Service Provider
  *
  * @return false|array
  */
-function simplesaml_get_authentication_attributes(SimpleSAML_Auth_Simple $saml_auth, $source) {
+function simplesaml_get_authentication_attributes(\SimpleSAML\Auth\Simple $saml_auth, $source) {
 	
-	if (!($saml_auth instanceof SimpleSAML_Auth_Simple) || empty($source)) {
+	if (!$saml_auth instanceof \SimpleSAML\Auth\Simple || empty($source)) {
 		return false;
 	}
 	
 	$result = $saml_auth->getAttributes();
 	
 	$auth_source = $saml_auth->getAuthSource();
-	if ($auth_source instanceof sspmod_saml_Auth_Source_SP) {
-		// only check extra data for SAML sources
-		$setting = elgg_get_plugin_setting("{$source}_external_id", 'simplesaml');
-		if (!empty($setting)) {
-			$external_id = $saml_auth->getAuthData($setting);
-			if (!empty($external_id)) {
-				$result["elgg:external_id"] = [$external_id["Value"]];
-			}
+	if (!$auth_source instanceof sspmod_saml_Auth_Source_SP) {
+		return $result;
+	}
+	
+	// only check extra data for SAML sources
+	$setting = elgg_get_plugin_setting("{$source}_external_id", 'simplesaml');
+	if (!empty($setting)) {
+		$external_id = $saml_auth->getAuthData($setting);
+		if (!empty($external_id)) {
+			$result["elgg:external_id"] = [$external_id["Value"]];
 		}
 	}
 	
@@ -345,7 +336,7 @@ function simplesaml_get_authentication_attributes(SimpleSAML_Auth_Simple $saml_a
  */
 function simplesaml_link_user(ElggUser $user, $saml_source, $saml_uid) {
 	
-	if (!($user instanceof ElggUser) || empty($saml_source) || empty($saml_uid)) {
+	if (!$user instanceof ElggUser || empty($saml_source) || empty($saml_uid)) {
 		return false;
 	}
 	
@@ -360,7 +351,7 @@ function simplesaml_link_user(ElggUser $user, $saml_source, $saml_uid) {
 		'site_guids' => false,
 		'plugin_id' => 'simplesaml',
 		'plugin_user_setting_name_value_pairs' => [
-			$saml_source . '_uid' => $saml_uid,
+			"{$saml_source}_uid" => $saml_uid,
 		],
 	];
 	
@@ -371,7 +362,7 @@ function simplesaml_link_user(ElggUser $user, $saml_source, $saml_uid) {
 	}
 	
 	// now save the setting for this user
-	return elgg_set_plugin_user_setting("{$saml_source}_uid", $saml_uid, $user->getGUID(), 'simplesaml');
+	return elgg_set_plugin_user_setting("{$saml_source}_uid", $saml_uid, $user->guid, 'simplesaml');
 }
 
 /**
@@ -384,7 +375,7 @@ function simplesaml_link_user(ElggUser $user, $saml_source, $saml_uid) {
  */
 function simplesaml_unlink_user(ElggUser $user, $saml_source) {
 	
-	if (!($user instanceof ElggUser) || empty($saml_source)) {
+	if (!$user instanceof ElggUser || empty($saml_source)) {
 		return false;
 	}
 	
@@ -392,7 +383,7 @@ function simplesaml_unlink_user(ElggUser $user, $saml_source) {
 	simplesaml_save_authentication_attributes($user, $saml_source);
 	
 	// remove the link to the user
-	return elgg_unset_plugin_user_setting("{$saml_source}_uid", $user->getGUID(), 'simplesaml');
+	return elgg_unset_plugin_user_setting("{$saml_source}_uid", $user->guid, 'simplesaml');
 }
 
 /**
@@ -449,7 +440,13 @@ function simplesaml_register_user($name, $email, $saml_source, $validate = false
 		];
 		
 		if (!elgg_trigger_plugin_hook('register', 'user', $params, true)) {
+			// someone prevented registration
 			register_error(elgg_echo('registerbad'));
+			
+			// remove user
+			elgg_call(ELGG_IGNORE_ACCESS, function () use ($new_user) {
+				$new_user->delete();
+			});
 		} else {
 			return $new_user;
 		}
@@ -512,26 +509,24 @@ function simplesaml_generate_unique_username($username) {
 	$username = str_pad($username, $minchars, '0', STR_PAD_RIGHT);
 	
 	// we have to be able to see all users
-	$hidden = access_show_hidden_entities(true);
+	$user = elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function() use ($username) {
+		return get_user_by_username($username);
+	});
 	
 	// does this username exist
-	if (!get_user_by_username($username)) {
-		// restore hidden entities
-		access_show_hidden_entities($hidden);
-		
+	if (empty($user)) {
 		return $username;
 	}
 	
-	// make a new one
-	$i = 1;
-	while (get_user_by_username($username . $i)) {
-		$i++;
-	}
-	
-	// restore hidden entities
-	access_show_hidden_entities($hidden);
-
-	return $username . $i;
+	return elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function() use ($username) {
+		// make a new one
+		$i = 1;
+		while (get_user_by_username($username . $i)) {
+			$i++;
+		}
+		
+		return $username . $i;
+	});
 }
 
 /**
@@ -545,12 +540,12 @@ function simplesaml_generate_unique_username($username) {
  */
 function simplesaml_save_authentication_attributes(ElggUser $user, $saml_source, $attributes = false) {
 
-	if (!($user instanceof ElggUser) || empty($saml_source) || !simplesaml_is_enabled_source($saml_source)) {
+	if (!$user instanceof ElggUser || empty($saml_source) || !simplesaml_is_enabled_source($saml_source)) {
 		return;
 	}
 	
 	// remove the current attributes
-	elgg_unset_plugin_user_setting("{$saml_source}_attributes", $user->getGUID(), 'simplesaml');
+	elgg_unset_plugin_user_setting("{$saml_source}_attributes", $user->guid, 'simplesaml');
 	
 	if (empty($attributes)) {
 		// no new attributes to save
@@ -568,7 +563,7 @@ function simplesaml_save_authentication_attributes(ElggUser $user, $saml_source,
 		unset($attributes["elgg:auto_link"]);
 		
 		// save attributes
-		elgg_set_plugin_user_setting("{$saml_source}_attributes", json_encode($attributes), $user->getGUID(), 'simplesaml');
+		elgg_set_plugin_user_setting("{$saml_source}_attributes", json_encode($attributes), $user->guid, 'simplesaml');
 	}
 }
 
@@ -583,8 +578,8 @@ function simplesaml_save_authentication_attributes(ElggUser $user, $saml_source,
  */
 function simplesaml_get_authentication_user_attribute($saml_source, $attribute_name = false, $user_guid = 0) {
 	
-	$user_guid = sanitise_int($user_guid, false);
-	if (empty($user_guid)) {
+	$user_guid = (int) $user_guid;
+	if ($user_guid < 1) {
 		$user_guid = elgg_get_logged_in_user_guid();
 	}
 	
@@ -630,7 +625,7 @@ function simplesaml_get_user_attributes($idp_auth_id) {
 	
 	$result = [
 		'uid' => [
-			$user->username . '@' . get_site_domain($site->getGUID()),
+			$user->username . '@' . $site->getDomain(),
 		],
 	];
 	
@@ -754,7 +749,8 @@ function simplesaml_check_force_authentication() {
 		$found = false;
 
 		foreach ($cidrs as $cidr) {
-			if (simplesaml_cidr_match($_SERVER['REMOTE_ADDR'], trim($cidr))) {
+			$client_ip = _elgg_services()->request->getClientIp();
+			if (simplesaml_cidr_match($client_ip, trim($cidr))) {
 				$found = true;
 			}
 		}
@@ -774,7 +770,10 @@ function simplesaml_check_force_authentication() {
 	if (!isset($last_forward)) {
 		elgg_get_session()->set('last_forward_from', current_page_url());
 	}
-	forward("saml/login/{$setting}");
+	
+	forward(elgg_generate_url('default:saml:login', [
+		'saml_source' => $setting,
+	]));
 }
 
 /**
@@ -884,17 +883,18 @@ function simplesaml_validate_authentication_attributes($saml_source, $saml_attri
 /**
  * Helper function to check if IP is in CIDR
  *
- * @param string $ip    IP address to match with CIRT
- * @param string $cidr  CIDR to match the IP against
+ * @param string $ip   IP address to match with CIDR
+ * @param string $cidr CIDR to match the IP against
  *
  * @return bool
  */
 function simplesaml_cidr_match($ip, $cidr) {
+	
 	list($subnet, $mask) = explode('/', $cidr);
-
+	
 	if ((ip2long($ip) & ~((1 << (32 - $mask)) - 1) ) == ip2long($subnet)) {
 		return true;
-    	}
-
-    	return false;
+    }
+	
+    return false;
 }

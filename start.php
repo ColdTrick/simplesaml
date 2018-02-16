@@ -39,7 +39,7 @@ function simplesaml_plugins_boot() {
 function simplesaml_init() {
 	
 	// load libraries
-	Includer::requireFile(dirname(__FILE__) . '/lib/functions.php');
+	Includer::requireFileOnce(dirname(__FILE__) . '/lib/functions.php');
 	
 	// check for force authentication
 	elgg_extend_view('page/default', 'simplesaml/force_authentication', 200);
@@ -53,7 +53,7 @@ function simplesaml_init() {
 	
 	// register plugin hooks
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', '\ColdTrick\SimpleSAML\WalledGarden::publicPages');
-	elgg_register_plugin_hook_handler('entity:url', 'object', '\ColdTrick\SimpleSAML\WidgetManager::widgetURL');
+	elgg_register_plugin_hook_handler('entity:url', 'object', '\ColdTrick\SimpleSAML\Widgets::widgetURL');
 	elgg_register_plugin_hook_handler('setting', 'plugin', '\ColdTrick\SimpleSAML\PluginSettings::saveSetting');
 	elgg_register_plugin_hook_handler('action', 'logout', '\ColdTrick\SimpleSAML\Logout::action');
 }

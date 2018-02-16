@@ -4,29 +4,24 @@
  * the option to link or create an account
  */
 
-$source = get_input('saml_source');
-
 if (elgg_is_logged_in()) {
-	register_error(elgg_echo('simplesaml:error:loggedin'));
-	forward();
+	throw new Elgg\HttpException(elgg_echo('simplesaml:error:loggedin'), ELGG_HTTP_FORBIDDEN);
 }
 
+$source = elgg_extract('saml_source', $vars);
 if (empty($source)) {
-	register_error(elgg_echo('simplesaml:error:no_source'));
-	forward();
+	throw new Elgg\HttpException(elgg_echo('simplesaml:error:no_source'), ELGG_HTTP_BAD_REQUEST);
 }
 
 $label = simplesaml_get_source_label($source);
 
 if (!simplesaml_is_enabled_source($source)) {
-	register_error(elgg_echo('simplesaml:error:source_not_enabled', [$label]));
-	forward();
+	throw new Elgg\HttpException(elgg_echo('simplesaml:error:source_not_enabled', [$label]), ELGG_HTTP_BAD_REQUEST);
 }
 
 $session_source = elgg_get_session()->get('saml_source');
 if ($session_source !== $source) {
-	register_error(elgg_echo('simplesaml:error:source_mismatch'));
-	forward();
+	throw new Elgg\HttpException(elgg_echo('simplesaml:error:source_mismatch'), ELGG_HTTP_CONFLICT);
 }
 
 // cleanup login form
@@ -42,11 +37,10 @@ $content = elgg_view('simplesaml/no_linked_account', [
 ]);
 
 // build body
-$body = elgg_view_layout('one_column', [
+$body = elgg_view_layout('default', [
 	'title' => $title_text,
 	'content' => $content,
 ]);
 
 // draw page
 echo elgg_view_page($title_text, $body);
-

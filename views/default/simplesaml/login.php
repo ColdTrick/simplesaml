@@ -24,6 +24,8 @@ foreach ($sources as $source) {
 	echo elgg_format_element('div', [], elgg_view('output/url', [
 		'text' => $text,
 		'title' => $label,
-		'href' => "saml/login/{$source}",
+		'href' => elgg_generate_url('default:saml:login', [
+			'saml_source' => $source,
+		]),
 	]));
 }

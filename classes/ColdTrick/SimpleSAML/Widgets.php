@@ -2,20 +2,18 @@
 
 namespace ColdTrick\SimpleSAML;
 
-class WidgetManager {
+class Widgets {
 	
 	/**
-	 * Add widget title link if Widget Manager is enabled.
+	 * Add widget title link
 	 *
-	 * @param string $hook         the name of the hook
-	 * @param string $type         the type of the hook
-	 * @param array  $return_value current return value
-	 * @param array  $params       supplied params
+	 * @param \Elgg\Hook $hook 'entity:url', 'object'
 	 *
 	 * @return void|string
 	 */
-	public static function widgetURL($hook, $type, $return_value, $params) {
+	public static function widgetURL(\Elgg\Hook $hook) {
 		
+		$return_value = $hook->getValue();
 		if (!empty($return_value)) {
 			// url already set
 			return;
@@ -26,7 +24,7 @@ class WidgetManager {
 			return;
 		}
 		
-		$widget = elgg_extract('entity', $params);
+		$widget = $hook->getEntityParam();
 		if (!($widget instanceof \ElggWidget)) {
 			return;
 		}
@@ -44,6 +42,8 @@ class WidgetManager {
 			return;
 		}
 		
-		return "/saml/login/{$samlsource}";
+		return elgg_generate_url('default:saml:login', [
+			'saml_source' => $samlsource;
+		]);
 	}
 }

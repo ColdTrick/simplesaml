@@ -12,6 +12,7 @@ if (!is_callable('simplesaml_get_enabled_sources')) {
 	return true;
 }
 
+/* @var $plugin \ElggPlugin */
 $plugin = elgg_extract('entity', $vars);
 $page_owner = elgg_get_page_owner_entity();
 
@@ -37,19 +38,22 @@ foreach ($sources as $source) {
 	$body = elgg_format_element('label', [], $label);
 	$body .= '<br />';
 	
-	if ($plugin->getUserSetting("{$source}_uid", $page_owner->getGUID())) {
+	if ($plugin->getUserSetting("{$source}_uid", $page_owner->guid)) {
 		// user is connected, offer the option to disconnect
 		$body .= elgg_format_element('div', [], elgg_echo('simplesaml:usersettings:connected', [$label]));
 		
 		$body .= elgg_format_element('div', [], elgg_view('output/url', [
 			'text' => elgg_echo('simplesaml:usersettings:unlink_url'),
 			'confirm' => elgg_echo('simplesaml:usersettings:unlink_confirm', [$label]),
-			'href' => "action/simplesaml/unlink?user_guid={$page_owner->getGUID()}&source={$source}",
+			'href' => elgg_generate_action_url('simplesaml/unlink', [
+				'user_guid' => $page_owner->guid,
+				'source' => $source,
+			]),
 		]));
 		
 		// for an admin show saved attributes
 		if (elgg_is_admin_logged_in()) {
-			$attributes = simplesaml_get_authentication_user_attribute($source, false, $page_owner->getGUID());
+			$attributes = simplesaml_get_authentication_user_attribute($source, false, $page_owner->guid);
 			if (!empty($attributes)) {
 				$body .= elgg_format_element('div', ['class' => 'mtm'], elgg_view('output/url', [
 					'text' => elgg_echo('simplesaml:usersettings:toggle_attributes'),
@@ -98,10 +102,12 @@ foreach ($sources as $source) {
 		// user is not connected, offer the option to connect
 		$body .= elgg_format_element('div', [], elgg_echo('simplesaml:usersettings:not_connected', [$label]));
 		
-		if ($page_owner->getGUID() == elgg_get_logged_in_user_guid()) {
+		if ($page_owner->guid === elgg_get_logged_in_user_guid()) {
 			$body .= elgg_view('output/url', [
 				'text' => elgg_echo('simplesaml:usersettings:link_url'),
-				'href' => "saml/authorize/{$source}",
+				'href' => elgg_generate_url('default:saml:authorize', [
+					'saml_source' => $source,
+				]),
 			]);
 		}
 	}

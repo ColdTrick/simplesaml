@@ -1,9 +1,7 @@
 Installation instructions
 =========================
 
-This installation instruction is mostly based on SimpleSAMLPHP v1.5 some parts could be different in newer versions.
-
-In order to use a CAS server as the IDentity Provider you'll need SimpleSAMLPHP version >= 1.6
+This installation instruction is mostly based on SimpleSAMLPHP v1.15 some parts could be different in newer versions.
 
 Step 1: SimpleSAMLPHP installation
 ----------------------------------
@@ -115,4 +113,5 @@ Also see <https://simplesamlphp.org/docs/stable/simplesamlphp-idp>
 ### Step 3.2: Elgg configuration
 
 1. Follow the step described in 2.2
-2. You can configure which profile data is exported in the authentication challenge, if you leave the SAML name fields empty the data will NOT be exported. 
+2. You can configure which profile data is exported in the authentication challenge, if you leave the SAML name fields empty the data will NOT be exported.
+ 

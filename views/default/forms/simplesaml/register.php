@@ -1,43 +1,46 @@
 <?php
 
 $source = elgg_extract('saml_source', $vars);
-$label = simplesaml_get_source_label($source);
 
-$saml_attributes = elgg_get_session()->get('saml_attributes');
-
-echo elgg_format_element('div', ['class' => 'mbm'], elgg_echo('simplesaml:forms:register:description', [$label]));
-
-// check for missing fields
-// we need name and email
-if (!elgg_extract('elgg:firstname', $saml_attributes) && !elgg_extract('elgg:lastname', $saml_attributes)) {
-	// no name fields, so ask
-	$label = elgg_format_element('label', ['for' => 'displayname'], elgg_echo('name'));
-	$input = elgg_view('input/text', [
-		'name' => 'displayname',
-		'id' => 'displayname',
-	]);
-	
-	echo elgg_format_element('div', [], $label . $input);
-}
-
-if (!elgg_extract('elgg:email', $saml_attributes)) {
-	// no email field, so ask
-	$label = elgg_format_element('label', ['for' => 'email'], elgg_echo('email'));
-	$input = elgg_view('input/email', [
-		'name' => 'email',
-		'id' => 'email',
-	]);
-	
-	echo elgg_format_element('div', [], $label . $input);
-	
-}
-
-$footer = elgg_view('input/hidden', [
+echo elgg_view_field([
+	'#type' => 'hidden',
 	'name' => 'saml_source',
 	'value' => $source,
 ]);
-$footer .= elgg_view('input/submit', [
+
+$label = simplesaml_get_source_label($source);
+echo elgg_format_element('div', ['class' => 'mbm'], elgg_echo('simplesaml:forms:register:description', [$label]));
+
+// check for missing fields
+$saml_attributes = elgg_get_session()->get('saml_attributes');
+
+// we need name
+if (!elgg_extract('elgg:firstname', $saml_attributes) && !elgg_extract('elgg:lastname', $saml_attributes)) {
+	// no name fields, so ask
+	echo elgg_view_field([
+		'#type' => 'text',
+		'#label' => elgg_echo('name'),
+		'name' => 'displayname',
+		'value' => elgg_extract('displayname', $vars),
+		'required' => true,
+	]);
+}
+
+// we need email
+if (!elgg_extract('elgg:email', $saml_attributes)) {
+	// no email field, so ask
+	echo elgg_view_field([
+		'#type' => 'email',
+		'#label' => elgg_echo('email'),
+		'name' => 'email',
+		'value' => elgg_extract('email', $vars),
+		'required' => true,
+	]);
+}
+
+// form footer
+$footer = elgg_view_field([
+	'#type' => 'submit',
 	'value' => elgg_echo('register'),
 ]);
-
-echo elgg_format_element('div', ['class' => 'elgg-foot'], $footer);
+elgg_set_form_footer($footer);

@@ -27,7 +27,7 @@ $title_text = elgg_echo('login');
 $body = elgg_view_form('login');
 
 // make the page
-$page_data = elgg_view_layout('one_column', [
+$page_data = elgg_view_layout('default', [
 	'title' => $title_text,
 	'content' => $body,
 ]);

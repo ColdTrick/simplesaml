@@ -9,29 +9,21 @@ class PluginSettings {
 	 *
 	 * This is used to save an array as JSON in a plugin setting. This because arrays can't be saved in plugin settings.
 	 *
-	 * @param string $hook         the name of the hook
-	 * @param string $type         the type of the hook
-	 * @param array  $return_value current return value
-	 * @param array  $params       supplied params
+	 * @param \Elgg\Hook $hook 'setting', 'plugin'
 	 *
 	 * @return void|string
 	 */
-	public static function saveSetting($hook, $type, $return_value, $params) {
+	public static function saveSetting(\Elgg\Hook $hook) {
 		
-		$plugin = elgg_extract('plugin', $params);
-		$setting_name = elgg_extract('name', $params);
-	
-		if (!($plugin instanceof \ElggPlugin)) {
+		$plugin = $hook->getParam('plugin');
+		if (!$plugin instanceof \ElggPlugin || $plugin->getID() !== 'simplesaml') {
 			return;
 		}
 		
-		if ($plugin->getID() !== 'simplesaml') {
-			return;
-		}
-		
+		$setting_name = $hook->getParam('name');
 		$pattern = '/^(?:idp_)[\S]+(?:_attributes)$/';
 		if (preg_match($pattern, $setting_name)) {
-			return json_encode($return_value);
+			return json_encode($hook->getValue());
 		}
 	}
 }
