@@ -4,41 +4,23 @@
  */
 
 if (elgg_is_logged_in()) {
-	register_error(elgg_echo('simplesaml:error:loggedin'));
-	forward(REFERER);
+	throw new Elgg\HttpException(elgg_echo('simplesaml:error:loggedin'), ELGG_HTTP_FORBIDDEN);
 }
 
 $source = get_input('saml_source');
 if (empty($source)) {
-	register_error(elgg_echo('simplesaml:error:no_source'));
-	forward(REFERER);
-}
-/**
- * Login based on a SAML/CAS source
- */
-
-if (elgg_is_logged_in()) {
-	register_error(elgg_echo('simplesaml:error:loggedin'));
-	forward(REFERER);
-}
-
-$source = get_input('saml_source');
-if (empty($source)) {
-	register_error(elgg_echo('simplesaml:error:no_source'));
-	forward(REFERER);
+	throw new Elgg\HttpException(elgg_echo('simplesaml:error:no_source'), ELGG_HTTP_BAD_REQUEST);
 }
 
 $label = simplesaml_get_source_label($source);
 if (!simplesaml_is_enabled_source($source)) {
-	register_error(elgg_echo('simplesaml:error:source_not_enabled', [$label]));
-	forward(REFERER);
+	throw new Elgg\HttpException(elgg_echo('simplesaml:error:source_not_enabled', [$label]), ELGG_HTTP_BAD_REQUEST);
 }
 
 try {
 	$saml_auth = new SimpleSAML_Auth_Simple($source);
 } catch (Exception $e) {
-	register_error(elgg_echo('simplesaml:error:class', [$e->getMessage()]));
-	forward(REFERER);
+	throw new Elgg\HttpException(elgg_echo('simplesaml:error:class', [$e->getMessage()]), ELGG_HTTP_INTERNAL_SERVER_ERROR, $e);
 }
 
 // make sure we can forward you to the correct url

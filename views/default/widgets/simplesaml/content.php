@@ -18,13 +18,14 @@ if (!empty($user)) {
 	return;
 }
 
-$widget = elgg_extract('entity', $vars);
-
 // there need to be saml source enaqbled
 $sources = simplesaml_get_enabled_sources();
 if (empty($sources)) {
 	return;
 }
+
+/* @var $widget \ElggWidget */
+$widget = elgg_extract('entity', $vars);
 
 $configured_source = $widget->samlsource;
 if (empty($configured_source) || ($configured_source === 'all')) {

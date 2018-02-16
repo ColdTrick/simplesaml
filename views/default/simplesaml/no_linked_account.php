@@ -8,7 +8,7 @@ $source = elgg_extract('saml_source', $vars);
 $allow_registration = (bool) elgg_extract('allow_registration', $vars, false);
 
 $label = simplesaml_get_source_label($source);
-$login_class = 'pam';
+$login_class = ['pam'];
 
 // add a description
 echo elgg_format_element('div', ['class' => 'mbm'], elgg_echo('simplesaml:no_linked_account:description', [$label]));
@@ -23,11 +23,12 @@ if ($allow_registration) {
 	];
 	
 	// show register box
-	$registration_form = elgg_view_form('simplesaml/register', null, $body_vars);
+	$registration_form = elgg_view_form('simplesaml/register', [], $body_vars);
 	$login_options .= elgg_view_module('popup', elgg_echo('register'), $registration_form, ['class' => 'pam mbl']);
 	
 	// show header for if you already have an account
-	$login_class .= ' hidden mtm';
+	$login_class[] = 'hidden';
+	$login_class[] = 'mtm';
 	$login_options .= elgg_view('output/url', [
 		'href' => '#simplesaml-no-linked-account-login',
 		'text' => elgg_echo('simplesaml:no_linked_account:login'),

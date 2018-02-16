@@ -21,86 +21,94 @@ $title = elgg_echo('simplesaml:settings:sources:configuration:title', [$label]);
 $body = '';
 
 // source icon
-$icon = elgg_echo('simplesaml:settings:sources:configuration:icon');
-$icon .= elgg_view('input/url', [
+$body .= elgg_view_field([
+	'#type' => 'url',
+	'#label' => elgg_echo('simplesaml:settings:sources:configuration:icon'),
+	'#help' => elgg_echo('simplesaml:settings:sources:configuration:icon:description'),
 	'name' => "params[{$source_id}_icon_url]",
 	'value' => $plugin->getSetting("{$source_id}_icon_url"),
 ]);
-$icon .= elgg_format_element('div', ['class' => 'elgg-subtext'], elgg_echo('simplesaml:settings:sources:configuration:icon:description'));
-$body .= elgg_format_element('div', [], $icon);
 
 // autolink users based on profile field
-$autolink = elgg_echo('simplesaml:settings:sources:configuration:auto_link') . '<br />';
-$autolink .= elgg_view('input/dropdown', [
+$body .= elgg_view_field([
+	'#type' => 'select',
+	'#label' => elgg_echo('simplesaml:settings:sources:configuration:auto_link'),
+	'#help' => elgg_echo('simplesaml:settings:sources:configuration:auto_link:description'),
 	'name' => "params[{$source_id}_auto_link]",
 	'value' => $plugin->getSetting("{$source_id}_auto_link"),
 	'options_values' => $auto_link_options,
 ]);
-$autolink .= elgg_format_element('div', ['class' => 'elgg-subtext'], elgg_echo('simplesaml:settings:sources:configuration:auto_link:description'));
-$body .= elgg_format_element('div', [], $autolink);
 
-if ($source_id_type == 'saml') {
+if ($source_id_type === 'saml') {
 	// only SAML sources have this information
 	// configure optional external id field
-	$external_id = elgg_echo('simplesaml:settings:sources:configuration:external_id');
-	$external_id .= elgg_view('input/text', [
+	$body .= elgg_view_field([
+		'#type' => 'text',
+		'#label' => elgg_echo('simplesaml:settings:sources:configuration:external_id'),
+		'#help' => elgg_echo('simplesaml:settings:sources:configuration:external_id:description'),
 		'name' => "params[{$source_id}_external_id]",
 		'value' => $plugin->getSetting("{$source_id}_external_id"),
 	]);
-	$external_id .= elgg_format_element('div', ['class' => 'elgg-subtext'], elgg_echo('simplesaml:settings:sources:configuration:external_id:description'));
-	$body .= elgg_format_element('div', [], $external_id);
 }
 
 $force_authentication = $plugin->getSetting('force_authentication');
-if ($force_authentication == $source_id) {
+if ($force_authentication === $source_id) {
 	// Only show when the current sourec has the force authentication enabled
-
-	$force_authentication_cidrs = elgg_echo('simplesaml:settings:sources:configuration:force_authentication_cidrs');
-	$force_authentication_cidrs .= elgg_view('input/text', [
+	$body .= elgg_view_field([
+		'#type' => 'text',
+		'#label' => elgg_echo('simplesaml:settings:sources:configuration:force_authentication_cidrs'),
+		'#help' => elgg_echo('simplesaml:settings:sources:configuration:force_authentication_cidrs:description'),
 		'name' => "params[{$source_id}_force_authentication_cidrs]",
 		'value' => $plugin->getSetting("{$source_id}_force_authentication_cidrs"),
 	]);
-	$force_authentication_cidrs .= elgg_format_element('div', ['class' => 'elgg-subtext'], elgg_echo('simplesaml:settings:sources:configuration:force_authentication_cidrs:description'));
-	$body .= elgg_format_element('div', [], $force_authentication_cidrs);
 }
 
 // advanced access options
-$body .= elgg_format_element('h4', ['class' => 'mtm'], elgg_echo('simplesaml:settings:sources:configuration:access'));
-$body .= elgg_view('output/longtext', [
-	'value' => elgg_echo('simplesaml:settings:sources:configuration:access:description'),
+$body .= elgg_view_field([
+	'#type' => 'fieldset',
+	'legend' => elgg_echo('simplesaml:settings:sources:configuration:access'),
+	'fields' => [
+		[
+			'#html' => elgg_view('output/longtext', [
+				'value' => elgg_echo('simplesaml:settings:sources:configuration:access:description'),
+			]),
+		],
+		// access matching
+		[
+			'#type' => 'fieldset',
+			'align' => 'horizontal',
+			'fields' => [
+				[
+					'#type' => 'select',
+					'name' => "params[{$source_id}_access_type]",
+					'value' => $plugin->getSetting("{$source_id}_access_type"),
+					'options_values' => $access_type_options,
+				],
+				[
+					'#type' => 'select',
+					'name' => "params[{$source_id}_access_matching]",
+					'value' => $plugin->getSetting("{$source_id}_access_matching"),
+					'options_values' => $access_matching_options,
+				],
+			],
+		],
+		// access field
+		[
+			'#type' => 'text',
+			'#label' => elgg_echo('simplesaml:settings:sources:configuration:access_field'),
+			'#help' => elgg_echo('simplesaml:settings:sources:configuration:access_field:description'),
+			'name' => "params[{$source_id}_access_field]",
+			'value' => $plugin->getSetting("{$source_id}_access_field"),
+		],
+		// access field value
+		[
+			'#type' => 'text',
+			'#label' => elgg_echo('simplesaml:settings:sources:configuration:access_value'),
+			'#help' => elgg_echo('simplesaml:settings:sources:configuration:access_value:description'),
+			'name' => "params[{$source_id}_access_value]",
+			'value' => $plugin->getSetting("{$source_id}_access_value"),
+		],
+	],
 ]);
 
-// access matching
-$access_matching = elgg_view('input/dropdown', [
-	'name' => "params[{$source_id}_access_type]",
-	'value' => $plugin->getSetting("{$source_id}_access_type"),
-	'options_values' => $access_type_options,
-]);
-
-$access_matching .= elgg_view('input/dropdown', [
-	'name' => "params[{$source_id}_access_matching]",
-	'value' => $plugin->getSetting("{$source_id}_access_matching"),
-	'options_values' => $access_matching_options,
-	'class' => 'mlm',
-]);
-$body .= elgg_format_element('div', ['class' => 'mbm'], $access_matching);
-
-// access field
-$access_field = elgg_echo('simplesaml:settings:sources:configuration:access_field');
-$access_field .= elgg_view('input/text', [
-	'name' => "params[{$source_id}_access_field]",
-	'value' => $plugin->getSetting("{$source_id}_access_field"),
-]);
-$access_field .= elgg_format_element('div', ['class' => 'elgg-subtext'], elgg_echo('simplesaml:settings:sources:configuration:access_field:description'));
-$body .= elgg_format_element('div', [], $access_field);
-
-// access field value
-$access_value = elgg_echo('simplesaml:settings:sources:configuration:access_value');
-$access_value .= elgg_view('input/text', [
-	'name' => "params[{$source_id}_access_value]",
-	'value' => $plugin->getSetting("{$source_id}_access_value"),
-]);
-$access_value .= elgg_format_element('div', ['class' => 'elgg-subtext'], elgg_echo('simplesaml:settings:sources:configuration:access_value:description'));
-$body .= elgg_format_element('div', [], $access_value);
-
-echo elgg_view_module('inline', $title, $body, ['id' => "{$source_id}_wrapper", 'class' => 'hidden']);
+echo elgg_view_module('info', $title, $body, ['id' => "{$source_id}_wrapper", 'class' => 'hidden']);

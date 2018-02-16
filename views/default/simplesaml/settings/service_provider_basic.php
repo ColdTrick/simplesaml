@@ -58,37 +58,55 @@ if ($plugin->getSetting("{$source_auth_id}_remember_me")) {
 // add row for source
 $content = '';
 $content .= '<tr>';
-$content .= elgg_format_element('td', ['class' => 'center'], elgg_view('input/checkbox', [
+$content .= elgg_format_element('td', ['class' => 'center'], elgg_view_field([
+	'#type' => 'checkbox',
+	'#label' => '&nbsp;', // needed to make switch work
 	'name' => "params[{$source_auth_id}_enabled]",
 	'value' => '1',
 	'checked' => $enabled,
+	'switch' => true,
 ]));
 $content .= elgg_format_element('td', [], $source_auth_label);
 $content .= elgg_format_element('td', [], elgg_extract('source_type_label', $vars));
-$content .= elgg_format_element('td', ['class' => 'center'], elgg_view('input/checkbox', [
+$content .= elgg_format_element('td', ['class' => 'center'], elgg_view_field([
+	'#type' => 'checkbox',
+	'#label' => '&nbsp;', // needed to make switch work
 	'name' => "params[{$source_auth_id}_allow_registration]",
 	'value' => '1',
 	'checked' => $registration,
+	'switch' => true,
 ]));
-$content .= elgg_format_element('td', ['class' => 'center'], elgg_view('input/checkbox', [
+$content .= elgg_format_element('td', ['class' => 'center'], elgg_view_field([
+	'#type' => 'checkbox',
+	'#label' => '&nbsp;', // needed to make switch work
 	'name' => "params[{$source_auth_id}_auto_create_accounts]",
 	'value' => '1',
 	'checked' => $auto_create_accounts,
+	'switch' => true,
 ]));
-$content .= elgg_format_element('td', ['class' => 'center'], elgg_view('input/checkbox', [
+$content .= elgg_format_element('td', ['class' => 'center'], elgg_view_field([
+	'#type' => 'checkbox',
+	'#label' => '&nbsp;', // needed to make switch work
 	'name' => "params[{$source_auth_id}_save_attributes]",
 	'value' => '1',
 	'checked' => $save_attributes,
+	'switch' => true,
 ]));
-$content .= elgg_format_element('td', ['class' => 'center'], elgg_view('input/checkbox', [
+$content .= elgg_format_element('td', ['class' => 'center'], elgg_view_field([
+	'#type' => 'checkbox',
+	'#label' => '&nbsp;', // needed to make switch work
 	'name' => 'params[force_authentication]',
 	'value' => $source_auth_id,
+	'switch' => true,
 	] + $force_authentication
 ));
-$content .= elgg_format_element('td', ['class' => 'center'], elgg_view('input/checkbox', [
+$content .= elgg_format_element('td', ['class' => 'center'], elgg_view_field([
+	'#type' => 'checkbox',
+	'#label' => '&nbsp;', // needed to make switch work
 	'name' => "params[{$source_auth_id}_remember_me]",
 	'value' => '1',
 	'checked' => $remember_me,
+	'switch' => true,
 ]));
 $content .= '</tr>';
 

@@ -14,6 +14,7 @@ if (empty($sources)) {
 	return;
 }
 
+/* @var $widget \ElggWidget */
 $widget = elgg_extract('entity', $vars);
 
 $options_values = [
@@ -24,12 +25,10 @@ foreach ($sources as $source) {
 	$options_values[$source] = simplesaml_get_source_label($source);
 }
 
-echo '<div>';
-echo elgg_echo('simplesaml:widget:select_source');
-echo elgg_view('input/dropdown', [
+echo elgg_view_field([
+	'#type' => 'select',
+	'#label' => elgg_echo('simplesaml:widget:select_source'),
 	'name' => 'params[samlsource]',
 	'value' => $widget->samlsource,
 	'options_values' => $options_values,
-	'class' => 'mls',
 ]);
-echo '</div>';

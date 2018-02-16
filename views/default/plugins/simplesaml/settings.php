@@ -2,54 +2,58 @@
 
 elgg_require_js('simplesaml/settings');
 
+/* @var $plugin \ElggPlugin */
 $plugin = elgg_extract('entity', $vars);
 
 // path to simplesaml
-$path = elgg_echo('simplesaml:settings:simplesamlphp_path');
-$path .= elgg_view('input/text', [
+echo elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('simplesaml:settings:simplesamlphp_path'),
+	'#help' => elgg_echo('simplesaml:settings:simplesamlphp_path:description'),
 	'name' => 'params[simplesamlphp_path]',
 	'value' => $plugin->simplesamlphp_path,
 ]);
-$path .= elgg_format_element('div', ['class' => 'elgg-subtext'], elgg_echo('simplesaml:settings:simplesamlphp_path:description'));
-echo elgg_format_element('div', [], $path);
 
 // URI to simplesaml
-$uri = elgg_echo('simplesaml:settings:simplesamlphp_directory');
-$uri .= elgg_view('input/text', [
+echo elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('simplesaml:settings:simplesamlphp_directory'),
+	'#help' => elgg_echo('simplesaml:settings:simplesamlphp_directory:description', [elgg_get_site_url()]),
 	'name' => 'params[simplesamlphp_directory]',
 	'value' => $plugin->simplesamlphp_directory,
 ]);
-$uri .= elgg_format_element('div', ['class' => 'elgg-subtext'], elgg_echo('simplesaml:settings:simplesamlphp_directory:description', [elgg_get_site_url()]));
-echo elgg_format_element('div', [], $uri);
 
 // can we load SimpleSAMLPHP
 if (!is_callable('simplesaml_get_configured_sources')) {
 	// SimpleSAMLPHP is not yet loaded
-	echo elgg_format_element('div', [], elgg_echo('simplesaml:settings:warning:configuration:simplesamlphp'));
+	echo elgg_view_message('notice', elgg_echo('simplesaml:settings:warning:configuration:simplesamlphp'));
 	return;
 }
 
 // list all the configured service provider configs
-$sources = simplesaml_get_configured_sources();
 $souces_title = elgg_echo('simplesaml:settings:sources');
 
+$sources = simplesaml_get_configured_sources();
 if (!empty($sources)) {
 	$enabled_sources = [];
 	$first_source = true;
 	
 	$content = '<table class="elgg-table mbm" id="simplesaml-settings-sources">';
 	
+	$content .= '<thead>';
 	$content .= '<tr>';
-	$content .= elgg_format_element('th', ['class' => 'center'], elgg_echo('enable'));
+	$content .= elgg_format_element('th', [], elgg_echo('enable'));
 	$content .= elgg_format_element('th', [], elgg_echo('simplesaml:settings:sources:name'));
 	$content .= elgg_format_element('th', [], elgg_echo('simplesaml:settings:sources:type'));
-	$content .= elgg_format_element('th', ['class' => 'center'], elgg_echo('simplesaml:settings:sources:allow_registration'));
-	$content .= elgg_format_element('th', ['class' => 'center'], elgg_echo('simplesaml:settings:sources:auto_create_accounts'));
-	$content .= elgg_format_element('th', ['class' => 'center'], elgg_echo('simplesaml:settings:sources:save_attributes'));
-	$content .= elgg_format_element('th', ['class' => 'center'], elgg_echo('simplesaml:settings:sources:force_authentication'));
-	$content .= elgg_format_element('th', ['class' => 'center'], elgg_echo('simplesaml:settings:sources:remember_me'));
+	$content .= elgg_format_element('th', [], elgg_echo('simplesaml:settings:sources:allow_registration'));
+	$content .= elgg_format_element('th', [], elgg_echo('simplesaml:settings:sources:auto_create_accounts'));
+	$content .= elgg_format_element('th', [], elgg_echo('simplesaml:settings:sources:save_attributes'));
+	$content .= elgg_format_element('th', [], elgg_echo('simplesaml:settings:sources:force_authentication'));
+	$content .= elgg_format_element('th', [], elgg_echo('simplesaml:settings:sources:remember_me'));
 	$content .= '</tr>';
+	$content .= '</thead>';
 	
+	$content .= '<tbody>';
 	foreach ($sources as $source) {
 		
 		$source_auth_id = $source->getAuthId();
@@ -95,10 +99,11 @@ if (!empty($sources)) {
 		// set a flag so we know we had at least 1 source
 		$first_source = false;
 	}
+	$content .= '</tbody>';
 	
 	$content .= '</table>';
 	
-	echo elgg_view_module('inline', $souces_title, $content);
+	echo elgg_view_module('info', $souces_title, $content);
 	
 	// settings for enabled sources
 	if (!empty($enabled_sources)) {
@@ -158,16 +163,13 @@ if (!empty($sources)) {
 		'value' => elgg_echo('simplesaml:settings:warning:configuration:sources'),
 	]);
 	
-	echo elgg_view_module('inline', $souces_title, $content);
+	echo elgg_view_message('notice', $content, ['title' => $souces_title]);
 }
 
 // list all the IDP configurations
 $idp_configurations = simplesaml_get_configured_idp_sources();
-
 if (!empty($idp_configurations)) {
-	
 	foreach ($idp_configurations as $idp) {
-		
 		echo elgg_view('simplesaml/settings/identity_provider', [
 			'plugin' => $plugin,
 			'idp' => $idp,

@@ -3,6 +3,9 @@
  * This file is included when the plugin gets initialized
  */
 
+use Elgg\Project\Paths;
+use Elgg\Includer;
+
 elgg_register_event_handler('plugins_boot', 'system', 'simplesaml_plugins_boot');
 
 /**
@@ -17,12 +20,13 @@ function simplesaml_plugins_boot() {
 		return;
 	}
 	
-	if (!file_exists("{$path}/lib/_autoload.php")) {
+	$path = Paths::sanitize($path);
+	if (!file_exists("{$path}lib/_autoload.php")) {
 		return;
 	}
 	
 	// register library
-	elgg_register_library('simplesamlphp', "{$path}/lib/_autoload.php");
+	Includer::includeFile("{$path}lib/_autoload.php");
 	
 	elgg_register_event_handler('init', 'system', 'simplesaml_init');
 }
@@ -33,10 +37,9 @@ function simplesaml_plugins_boot() {
  * @return void
  */
 function simplesaml_init() {
-	// load libraries
-	elgg_load_library('simplesamlphp');
 	
-	require_once(dirname(__FILE__) . '/lib/functions.php');
+	// load libraries
+	Includer::requireFile(dirname(__FILE__) . '/lib/functions.php');
 	
 	// check for force authentication
 	elgg_extend_view('page/default', 'simplesaml/force_authentication', 200);
@@ -44,12 +47,6 @@ function simplesaml_init() {
 	
 	// allow login
 	elgg_extend_view('forms/login', 'simplesaml/login');
-	
-	// register page_handler for nice URL's
-	elgg_register_page_handler('saml', '\ColdTrick\SimpleSAML\PageHandler::saml');
-	
-	// register widgets
-	elgg_register_widget_type('simplesaml', elgg_echo('login'), elgg_echo('simplesaml:widget:description'), ['index'], true);
 	
 	// register events
 	elgg_register_event_handler('login:after', 'user', '\ColdTrick\SimpleSAML\Login::loginEvent');
@@ -59,8 +56,4 @@ function simplesaml_init() {
 	elgg_register_plugin_hook_handler('entity:url', 'object', '\ColdTrick\SimpleSAML\WidgetManager::widgetURL');
 	elgg_register_plugin_hook_handler('setting', 'plugin', '\ColdTrick\SimpleSAML\PluginSettings::saveSetting');
 	elgg_register_plugin_hook_handler('action', 'logout', '\ColdTrick\SimpleSAML\Logout::action');
-	
-	// register actions
-	elgg_register_action('simplesaml/register', dirname(__FILE__) . '/actions/register.php', 'public');
-	elgg_register_action('simplesaml/unlink', dirname(__FILE__) . '/actions/unlink.php');
 }
