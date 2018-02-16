@@ -43,7 +43,7 @@ class Widgets {
 		}
 		
 		return elgg_generate_url('default:saml:login', [
-			'saml_source' => $samlsource;
+			'saml_source' => $samlsource,
 		]);
 	}
 }

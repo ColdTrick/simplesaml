@@ -20,7 +20,7 @@ class WalledGarden {
 		$return_value[] = 'action/simplesaml/.*';
 		
 		$setting = elgg_get_plugin_setting('simplesamlphp_directory', 'simplesaml');
-		if ($simplesamlphp_directoy) {
+		if ($setting) {
 			$return_value[] = $setting . '/.*';
 		}
 		
