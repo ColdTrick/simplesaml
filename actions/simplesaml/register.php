@@ -82,7 +82,9 @@ if (is_array($username)) {
 // register user
 $user = simplesaml_register_user($name, $email, $source, $validate, $username);
 if (empty($user)) {
-	return elgg_error_response(elgg_echo('registerbad'));
+	return elgg_error_response(elgg_echo('registerbad'), elgg_generate_url('default:saml:no_linked_account', [
+		'saml_source' => $source,
+	]));
 }
 
 // link user to the saml source
@@ -115,7 +117,7 @@ try {
 	}
 	
 	// login the user
-	login($user);
+	login($user, $persistent);
 	
 	// get forward url
 	$forward_url = elgg_get_session()->remove('last_forward_from');
