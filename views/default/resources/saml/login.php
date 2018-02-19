@@ -56,7 +56,7 @@ elgg_get_session()->set('saml_attributes', $saml_attributes);
 elgg_get_session()->set('saml_source', $source);
 
 // make sure we can find all users (even unvalidated)
-$user = elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function() use ($source, $saml_attributes){
+$user = elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function() use ($source, $saml_attributes) {
 	return simplesaml_find_user($source, $saml_attributes);
 });
 
