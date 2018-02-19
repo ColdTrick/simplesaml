@@ -46,6 +46,7 @@ Also see <https://simplesamlphp.org/docs/stable/simplesamlphp-sp>
 			- elgg:email => the email address of the user (optional, when missing will be asked)
 			- elgg:external_id => a persistend unique id for this user (required, but can also be collected in a different way)
 			- elgg:username => a unique username for the user. This will be used when creating a user (if still available in Elgg)
+			- elgg:auto_link => the value to match a user on for auto linking SAML-source and Elgg user account (the match name can be configured in Elgg)
 	- add the new entityID to /metadata/saml20-idp-remote.php (see https://simplesamlphp.org/docs/stable/simplesamlphp-sp#section_2)
 
 #### 2.1.2 Connecting to a CAS IDentity Provider
@@ -61,7 +62,8 @@ Also see <https://simplesamlphp.org/docs/stable/cas:cas>
 			- elgg:email => the email address of the user (optional, when missing will be asked)
 			- elgg:external_id => a persistend unique id for this user (required, but can also be collected in a different way)
 			- elgg:username => a unique username for the user. This will be used when creating a user (if still available in Elgg)
-
+			- elgg:auto_link => the value to match a user on for auto linking SAML-source and Elgg user account (the match name can be configured in Elgg)
+	
 ### Step 2.2: Elgg configuration, first part
 
 1. Extract this plugin
