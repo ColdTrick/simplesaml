@@ -79,7 +79,7 @@ return array(
 	'simplesaml:usersettings:attributes:name' => "Name",
 	'simplesaml:usersettings:attributes:value' => "Value",
 	
-	'simplesaml:usersettings:not_connected' => "Your account is not connected with the external authentication source %s. If you wish to login on this site with your external account, please link both account.",
+	'simplesaml:usersettings:not_connected' => "Your account is not connected with the external authentication source %s. If you wish to login on this site with your external account, please link both accounts.",
 	'simplesaml:usersettings:link_url' => "Click here to link both accounts",
 	
 	'simplesaml:usersettings:no_sources' => "No external authentication sources are available, please ask your administrator to configure this.",
