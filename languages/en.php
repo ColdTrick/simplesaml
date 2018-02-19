@@ -26,8 +26,6 @@ return array(
 	// settings
 	'simplesaml:settings:simplesamlphp_path' => "Path to the SimpleSAMLPHP library",
 	'simplesaml:settings:simplesamlphp_path:description' => "The full path to the SimpleSAMLPHP (http://simplesamlphp.org) library without a trailing slash (/)",
-	'simplesaml:settings:simplesamlphp_directory' => "Virtual directory of the SimpleSAMLPHP library",
-	'simplesaml:settings:simplesamlphp_directory:description' => "The directory in which the SimpleSAMLPHP library is located without a trailing slash(/). For example if the full path is %ssimplesamlphp/, please enter simplesamlphp",
 	
 	'simplesaml:settings:sources' => "Service provider configuration",
 	'simplesaml:settings:sources:name' => "Authentication source",

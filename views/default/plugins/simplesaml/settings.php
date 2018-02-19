@@ -14,15 +14,6 @@ echo elgg_view_field([
 	'value' => $plugin->simplesamlphp_path,
 ]);
 
-// URI to simplesaml
-echo elgg_view_field([
-	'#type' => 'text',
-	'#label' => elgg_echo('simplesaml:settings:simplesamlphp_directory'),
-	'#help' => elgg_echo('simplesaml:settings:simplesamlphp_directory:description', [elgg_get_site_url()]),
-	'name' => 'params[simplesamlphp_directory]',
-	'value' => $plugin->simplesamlphp_directory,
-]);
-
 // can we load SimpleSAMLPHP
 if (!is_callable('simplesaml_get_configured_sources')) {
 	// SimpleSAMLPHP is not yet loaded

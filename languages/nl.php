@@ -65,8 +65,6 @@ return array (
   'simplesaml:no_linked_account:login' => 'Klik hier als je al een account hebt op deze site',
   'simplesaml:settings:simplesamlphp_path' => 'Pad naar de SimpleSAMLPHP bibliotheek',
   'simplesaml:settings:simplesamlphp_path:description' => 'Het volledige pad naar de SimpleSAMLPHP (http://simplesamlphp.org) bibliotheek zonder afsluitende slash (/)',
-  'simplesaml:settings:simplesamlphp_directory' => 'Virtuele map van de SimpleSAMLPHP bibliotheek',
-  'simplesaml:settings:simplesamlphp_directory:description' => 'De map waar de SimpleSAMLPHP bibliotheek te vinden is, zonder afsluitende slash (/). Bijvoorbeeld als het volledige pad %ssimplesamlphp/ is, geef dan simplesamlphp op',
   'simplesaml:settings:sources:allow_registration' => 'Registratie toestaan',
   'simplesaml:settings:sources:configuration:title' => 'Configuratie instellingen voor: %s',
   'simplesaml:settings:sources:configuration:icon' => 'URL naar een icoon voor deze connectie (optioneel)',
