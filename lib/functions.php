@@ -176,11 +176,9 @@ function simplesaml_find_user($source, $saml_attributes) {
 		'type' => 'user',
 		'limit' => 1,
 		'plugin_id' => 'simplesaml',
-		'plugin_user_setting_name_value_pairs' => [
-			"{$source}_uid" => $saml_uid,
-		],
+		'plugin_user_setting_name' => "{$source}_uid",
+		'plugin_user_setting_value' => $saml_uid,
 	];
-	
 	$users = elgg_get_entities_from_plugin_user_settings($options);
 	if (!empty($users)) {
 		return $users[0];
@@ -350,9 +348,8 @@ function simplesaml_link_user(ElggUser $user, $saml_source, $saml_uid) {
 		'limit' => false,
 		'site_guids' => false,
 		'plugin_id' => 'simplesaml',
-		'plugin_user_setting_name_value_pairs' => [
-			"{$saml_source}_uid" => $saml_uid,
-		],
+		'plugin_user_setting_name' => "{$saml_source}_uid",
+		'plugin_user_setting_value' => $saml_uid,
 	];
 	
 	$users = new ElggBatch('elgg_get_entities_from_plugin_user_settings', $options);
