@@ -2,7 +2,7 @@
 
 namespace ColdTrick\SimpleSAML;
 
-use Elgg\Http\OkResponse;
+use Elgg\Http\ErrorResponse;
 
 class Logout {
 	
@@ -39,7 +39,7 @@ class Logout {
 		global $SIMPLESAML_SOURCE;
 		
 		$responce = $hook->getValue();
-		if (!$responce instanceof OkResponse || empty($SIMPLESAML_SOURCE)) {
+		if ($responce instanceof ErrorResponse || empty($SIMPLESAML_SOURCE)) {
 			return;
 		}
 		
