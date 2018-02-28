@@ -3,8 +3,6 @@
  * Link a logged in user to a SAML/CAS source
  */
 
-elgg_gatekeeper();
-
 $source = elgg_extract('saml_source', $vars);
 if (empty($source)) {
 	throw new Elgg\HttpException(elgg_echo('simplesaml:error:no_source'), ELGG_HTTP_BAD_REQUEST);
