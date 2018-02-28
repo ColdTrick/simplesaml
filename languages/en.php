@@ -65,6 +65,7 @@ return array(
 	'simplesaml:settings:idp:description' => "Here you can configure which profile information is provided in the SAML authentication process.",
 	'simplesaml:settings:idp:show_attributes' => "Show the configurable profile information fields",
 	'simplesaml:settings:idp:profile_field' => "Profile field",
+	'simplesaml:settings:idp:profile_field:guid' => "GUID",
 	'simplesaml:settings:idp:attribute' => "SAML attribute name",
 	'simplesaml:settings:idp:attribute:description' => "When an attribute name is left blank it will not be provided in the SAML authentication process.",
 	

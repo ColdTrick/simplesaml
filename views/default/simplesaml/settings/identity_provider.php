@@ -41,7 +41,7 @@ $content .= '</tr>';
 
 // guid
 $content .= '<tr>';
-$content .= '<td>' . elgg_echo('guid') . ' (guid)</td>';
+$content .= '<td>' . elgg_echo('simplesaml:settings:idp:profile_field:guid') . ' (guid)</td>';
 $content .= '<td>' . elgg_view('input/text', [
 	'name' => "params[idp_{$idp_auth_id}_attributes][guid]",
 	'value' => elgg_extract('guid', $field_config),
