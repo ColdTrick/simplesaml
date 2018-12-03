@@ -35,11 +35,11 @@ class Logout {
 	 *
 	 * @return void
 	 */
-	public static function forward(\Elgg\Hook $hook) {
+	public static function response(\Elgg\Hook $hook) {
 		global $SIMPLESAML_SOURCE;
 		
-		$responce = $hook->getValue();
-		if ($responce instanceof ErrorResponse || empty($SIMPLESAML_SOURCE)) {
+		$response = $hook->getValue();
+		if ($response instanceof ErrorResponse || empty($SIMPLESAML_SOURCE)) {
 			return;
 		}
 		
@@ -48,7 +48,7 @@ class Logout {
 			$source = new \SimpleSAML\Auth\Simple($SIMPLESAML_SOURCE);
 	
 			// logout of the external source
-			$source->logout($responce->getForwardURL());
+			$source->logout($response->getForwardURL());
 		} catch (\Exception $e) {
 			// do nothing
 		}
