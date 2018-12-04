@@ -346,14 +346,15 @@ function simplesaml_link_user(ElggUser $user, $saml_source, $saml_uid) {
 	$options = [
 		'type' => 'user',
 		'limit' => false,
-		'site_guids' => false,
 		'plugin_id' => 'simplesaml',
 		'plugin_user_setting_name' => "{$saml_source}_uid",
 		'plugin_user_setting_value' => $saml_uid,
+		'batch' => true,
+		'batch_inc_offset' => false,
 	];
 	
-	$users = new ElggBatch('elgg_get_entities_from_plugin_user_settings', $options);
-	$users->setIncrementOffset(false);
+	$users = elgg_get_entities($options);
+	/* @var $other_user ElggUser */
 	foreach ($users as $other_user) {
 		simplesaml_unlink_user($other_user, $saml_source);
 	}
