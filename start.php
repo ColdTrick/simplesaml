@@ -54,5 +54,5 @@ function simplesaml_init() {
 	// register plugin hooks
 	elgg_register_plugin_hook_handler('entity:url', 'object', '\ColdTrick\SimpleSAML\Widgets::widgetURL');
 	elgg_register_plugin_hook_handler('setting', 'plugin', '\ColdTrick\SimpleSAML\PluginSettings::saveSetting');
-	elgg_register_plugin_hook_handler('action', 'logout', '\ColdTrick\SimpleSAML\Logout::action');
+	elgg_register_plugin_hook_handler('action:validate', 'logout', '\ColdTrick\SimpleSAML\Logout::action');
 }
