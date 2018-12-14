@@ -1,10 +1,11 @@
 <?php
 /**
- * This file was created by Translation Editor v2.0
- * On 2015-01-26 11:29
+ * This file was created by Translation Editor v7.0-beta
+ * On 2018-12-14 16:55
  */
 
 return array (
+  'simplesaml:settings:idp:profile_field:guid' => 'GUID',
   'simplesaml:settings:sources:remember_me' => 'Login onthouden',
   'simplesaml:error:not_configured' => 'Deze plugin is nog niet geconfigureerd, neem contact op met de site beheerder',
   'simplesaml:error:attribute_validation' => 'De site beheerder heeft extra regels toegevoegd aan de autorisatie procedure die verhinderen dat je gebruik kunt maken van %s als een autorisatiebron',
@@ -36,8 +37,8 @@ return array (
   'simplesaml:settings:sources:configuration:auto_link' => 'Link accounts automatisch op basis van profiel informatie (optioneel)',
   'simplesaml:settings:sources:configuration:auto_link:description' => 'Als de externe authenticatie bron de geconfigureerde profiel informatie aanlevert, zullen beide accounts automatisch gelinkt worden.',
   'simplesaml:settings:sources:configuration:auto_link:none' => 'Automatisch linken niet toestaan',
-  'simplesaml:settings:sources:configuration:force_authentication_cidrs' => "Schakel Forceer authenticatie alleen in voor de volgende CIDRs (optional)",
-  'simplesaml:settings:sources:configuration:force_authentication_cidrs:description' => "Komma gescheiden lijst van CIDRs om Forceer authenticatie voor aan te zetten, handig voor SSO binnen een intranet. Houd leeg voor altijd.",
+  'simplesaml:settings:sources:configuration:force_authentication_cidrs' => 'Schakel Forceer authenticatie alleen in voor de volgende CIDRs (optional)',
+  'simplesaml:settings:sources:configuration:force_authentication_cidrs:description' => 'Komma gescheiden lijst van CIDRs om Forceer authenticatie voor aan te zetten, handig voor SSO binnen een intranet. Houd leeg voor altijd.',
   'simplesaml:settings:warning:configuration:sources' => 'Er zijn nog geen authenticatie bronnen geconfigureerd',
   'simplesaml:settings:idp' => 'IDentity Provider configuratie voor: %s',
   'simplesaml:settings:idp:description' => 'Hier kan worden geconfigureerd welke profiel informatie wordt vrijgegeven in het SAML authenticatie proces.',
