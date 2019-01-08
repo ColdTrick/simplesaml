@@ -35,8 +35,6 @@ return [
 	],
 	'widgets' => [
 		'simplesaml' => [
-			'title' => elgg_echo('login'),
-			'description' => elgg_echo('simplesaml:widget:description'),
 			'context' => ['index'],
 			'multiple' => true,
 		],

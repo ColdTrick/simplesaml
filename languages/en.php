@@ -84,7 +84,8 @@ return array(
 	'simplesaml:usersettings:no_sources' => "No external authentication sources are available, please ask your administrator to configure this.",
 	
 	// widgets
-	'simplesaml:widget:description' => "Shows a login widget with only external authentication sources",
+	'widgets:simplesaml:name' => "Login",
+	'widgets:simplesaml:description' => "Shows a login widget with only external authentication sources",
 	'simplesaml:widget:select_source' => "Please select the authentication source to show in the widget",
 	'simplesaml:widget:logged_in' => "<b>%s</b> welcome on the <b>%s</b> community",
 
