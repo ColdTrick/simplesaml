@@ -1,6 +1,19 @@
 Version history
 ===============
 
+4.0 (2019-03-27):
+
+- changed: increased minimal Elgg version to 3.0
+- changed: sso logout forward respects previous return url
+- changed: walled garden protection handled in routes
+- fixed: correctly check response for errors
+- fixed: deprecated notice about wrong hook
+- fixed: endless redirect loop
+- fixed: get linked user correctly
+- fixed: using wrong function for checking linked users
+- removed: custom session function in favour of Elgg functions
+- removed: plugin settings for SimpleSAMLPHP virual directory
+
 3.1 (2018-02-15):
 
 - added: force authentication for specific CIRDs (#17)
